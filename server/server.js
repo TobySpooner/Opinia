@@ -15,3 +15,16 @@ const db = new pg.Pool({
 app.listen(8080, () => console.log("port 8080 confirmed"));
 
 app.get("/", (req, res) => res.json({ route: "root" }));
+
+console.log("Loaded DB URL:", process.env.DATABASE_URL);
+
+
+app.get("/users", async (req, res) => {
+  try {
+    const result = await db.query("SELECT * FROM accounts");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
