@@ -107,6 +107,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   grid-area: bar;
+  z-index: 12;
 }
 .one {
   padding-left: 10%;
