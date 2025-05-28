@@ -28,3 +28,26 @@ app.get("/users", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+
+app.post("/signup", async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const result = await db.query(
+      `INSERT INTO accounts (username, email, password, bio)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [username, email, password, "Hey there!"]
+    );
+
+    res.status(201).json({ message: "Account created", user: result.rows[0] });
+  } catch (err) {
+    console.error("Signup error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
