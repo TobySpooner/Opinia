@@ -3,6 +3,7 @@
 :root[data-theme="light"] {
   --text: #040316;
   --background: #ebebeb;
+  --background-l: #d5d5d5;
   --primary: #de3ce7;
   --secondary: #605bbe;
   --accent: #58a0e4;
@@ -10,114 +11,120 @@
 :root[data-theme="dark"] {
   --text: #eae9fc;
   --background: #141414;
+  --background-l: #252525;
   --primary: #bb18c3;
   --secondary: #4641a4;
   --accent: #1b63a7;
 }
 
-.barlow-semi-condensed-thin {
+.impact {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.barlow-sc-thin {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 100;
   font-style: normal;
 }
 
-.barlow-semi-condensed-extralight {
+.barlow-sc-extralight {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 200;
   font-style: normal;
 }
 
-.barlow-semi-condensed-light {
+.barlow-sc-light {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 300;
   font-style: normal;
 }
 
-.barlow-semi-condensed-regular {
+.barlow-sc-regular {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
-.barlow-semi-condensed-medium {
+.barlow-sc-medium {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 500;
   font-style: normal;
 }
 
-.barlow-semi-condensed-semibold {
+.barlow-sc-semibold {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 600;
   font-style: normal;
 }
 
-.barlow-semi-condensed-bold {
+.barlow-sc-bold {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 700;
   font-style: normal;
 }
 
-.barlow-semi-condensed-extrabold {
+.barlow-sc-extrabold {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 800;
   font-style: normal;
 }
 
-.barlow-semi-condensed-black {
+.barlow-sc-black {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 900;
   font-style: normal;
 }
 
-.barlow-semi-condensed-thin-italic {
+.barlow-sc-thin-italic {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 100;
   font-style: italic;
 }
 
-.barlow-semi-condensed-extralight-italic {
+.barlow-sc-extralight-italic {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 200;
   font-style: italic;
 }
 
-.barlow-semi-condensed-light-italic {
+.barlow-sc-light-italic {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 300;
   font-style: italic;
 }
 
-.barlow-semi-condensed-regular-italic {
+.barlow-sc-regular-italic {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 400;
   font-style: italic;
 }
 
-.barlow-semi-condensed-medium-italic {
+.barlow-sc-medium-italic {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 500;
   font-style: italic;
 }
 
-.barlow-semi-condensed-semibold-italic {
+.barlow-sc-semibold-italic {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 600;
   font-style: italic;
 }
 
-.barlow-semi-condensed-bold-italic {
+.barlow-sc-bold-italic {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 700;
   font-style: italic;
 }
 
-.barlow-semi-condensed-extrabold-italic {
+.barlow-sc-extrabold-italic {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 800;
   font-style: italic;
 }
 
-.barlow-semi-condensed-black-italic {
+.barlow-sc-black-italic {
   font-family: "Barlow Semi Condensed", sans-serif;
   font-weight: 900;
   font-style: italic;

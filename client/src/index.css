@@ -2,29 +2,64 @@
 
 html,
 body {
-  width: 100vw;
-  min-height: 100vh;
   margin: 0;
-  padding: 0;
-  background-color: red;
+  overflow-x: hidden;
 }
 
 #app {
   width: 100%;
-  min-height: fit-content;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
   background-color: var(--background);
   color: var(--text);
+  overflow-x: hidden;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 #hero-img {
-  width: 70%;
+  width: 95%;
   height: auto;
+}
+
+.hero-title {
+  width: 90%;
+  text-align: center;
+  margin: 0;
+}
+
+.hero-text {
+  text-align: center;
+  width: 90%;
+}
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 60%;
+}
+
+.button {
+  text-emphasis: none;
+  text-decoration: none;
+  color: var(--text);
+  background-color: var(--primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 1000px;
+  font-size: 1.25rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  transition: all 300ms ease-in-out;
+}
+.button.second {
+  text-align: center;
+  background-color: var(--background-l);
+}
+.button:active {
+  scale: 0.9;
 }
