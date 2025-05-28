@@ -2,6 +2,7 @@ import express from "express";
 import pg from "pg";
 import dotenv from "dotenv";
 import cors from "cors";
+import bcrypt from "bcrypt";
 
 const app = express();
 app.use(express.json());
@@ -37,11 +38,15 @@ app.post("/signup", async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
+    // Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
+
     const result = await db.query(
       `INSERT INTO accounts (username, email, password, bio)
        VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [username, email, password, "Hey there!"]
+      [username, email, hashedPassword, "Hey there!"]
     );
 
     res.status(201).json({ message: "Account created", user: result.rows[0] });
