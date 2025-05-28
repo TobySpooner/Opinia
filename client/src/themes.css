@@ -3,7 +3,7 @@
 :root[data-theme="light"] {
   --text: #040316;
   --background: #ebebeb;
-  --background-l: #d5d5d5;
+  --background-l: #d7d7d7;
   --primary: #de3ce7;
   --secondary: #605bbe;
   --accent: #58a0e4;
@@ -19,7 +19,7 @@
 
 .impact {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.05rem;
 }
 
 .barlow-sc-thin {
