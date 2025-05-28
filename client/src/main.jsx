@@ -2,7 +2,7 @@
 function App() {        
 
   return (
-    <div>hello
+    <div>Hello
     </div>
   )
 }
