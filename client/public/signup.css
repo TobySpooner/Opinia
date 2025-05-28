@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #EAE9FC;
+}
+
+h2 {
+    margin: 0;
+}
+
+#nav {
+    background: black;
+    padding: 1rem;
+}
+
+#signupContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 18rem;
+    height: 35rem;
+    background: white;
+    border-radius: 20px;
+}
