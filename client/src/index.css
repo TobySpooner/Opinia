@@ -44,6 +44,7 @@ body {
   align-items: center;
   justify-content: space-between;
   width: 60%;
+  z-index: 12;
 }
 
 .button {
@@ -107,7 +108,6 @@ nav {
   align-items: center;
   justify-content: space-between;
   grid-area: bar;
-  z-index: 12;
 }
 .one {
   padding-left: 10%;
