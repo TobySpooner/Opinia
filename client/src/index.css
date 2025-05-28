@@ -4,11 +4,12 @@ html,
 body {
   margin: 0;
   overflow-x: hidden;
+  background-color: var(--background);
 }
 
 #app {
   width: 100%;
-  min-height: 100vh;
+  min-height: 80vh;
   margin: 0;
   padding: 0;
   background-color: var(--background);
@@ -62,4 +63,75 @@ body {
 }
 .button:active {
   scale: 0.9;
+}
+
+#topbar {
+  width: 100vw;
+  background-color: var(--text);
+  max-height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0rem;
+}
+
+#topbar span {
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+#topbar span h2 {
+  color: #be7fd9;
+  margin: 0;
+}
+
+nav {
+  width: 100%;
+  height: fit-content;
+  z-index: 10;
+  display: grid;
+  grid-template-areas:
+    ". menu ."
+    "bar bar bar";
+  position: fixed;
+  bottom: 0;
+}
+
+.menu-bar {
+  width: 100%;
+  background-color: var(--text);
+  height: 10vh;
+  color: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  grid-area: bar;
+}
+.one {
+  padding-left: 10%;
+}
+.two {
+  padding-right: 10%;
+}
+
+#menu {
+  grid-area: menu;
+  z-index: 11;
+  transform: translateY(50%);
+  justify-self: center;
+}
+
+@media only screen and (width > 500px) {
+  .hero-buttons {
+    width: 50%;
+  }
+}
+@media only screen and (width > 650px) {
+  #hero-img {
+    width: 70%;
+  }
+  html {
+    font-size: 20px;
+  }
 }
