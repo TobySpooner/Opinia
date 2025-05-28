@@ -1,0 +1,30 @@
+@import url("themes.css");
+
+html,
+body {
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: red;
+}
+
+#app {
+  width: 100%;
+  min-height: fit-content;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--text);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+#hero-img {
+  width: 70%;
+  height: auto;
+}
