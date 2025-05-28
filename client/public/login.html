@@ -4,34 +4,40 @@
         <meta charset="UTF-8" />
         <link rel="icon" type="image/png" href="Opinia.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Opinia</title>
         <link rel="stylesheet" href="login.css">
+        <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700,900&display=swap" rel="stylesheet">
+        <title>Opinia</title>
     </head>
     <body>
         <div id="main"></div>
         <div id="nav">
-            <img>
+            <img id="navImg" src="OpiniaLogoBig.svg">
+            <h2><span class="gradient-text"><b>Opinia</b></span></h2>
         </div>
 
         <div id="loginContainer">
             <div>
+                <img id="containerImg" src="OpiniaLogoBig.svg">
+                <h2 id="loginTitle">Login to <span class="gradient-text">Opinia</span></h2>
                 <form>
-                    <label>
-                        <input type="username" name="username" placeholder="Username">
-                    </label>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username">
 
-                    <label>
-                        <input type="password" name="password" placeholder="Password">
-                    </label>
-
-                    <button type="submit">Submit</button>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password">
+                    
+                    <button type="submit" class="btn">
+                        Login
+                        <div class="btn2"></div>
+                    </button>
                 </form>
             </div>
-        </div>
 
-        <!-- <h1>LoginPage</h1>
+            <p id="alreadyOwn">Not got an account? <a href="/signup.html"><span class="gradient-text">Signup</span></a></p>
+        </div>
+        <!-- <h1>SignupPage</h1>
         <a href="/index.html">HomePage</a>
-        <a href="/signup.html">SignupPage</a> -->
+        <a href="/login.html">LoginPage</a> -->
         <script type="module" src="/src/main.js"></script>
     </body>
 </html>
