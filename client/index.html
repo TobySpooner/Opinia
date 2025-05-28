@@ -1,16 +1,29 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<!-- change to system pref at some point -->
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="Opinia.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Opinia</title>
+    <link rel="stylesheet" href="/src/themes.css" />
+    <link rel="stylesheet" href="/src/index.css" />
   </head>
   <body>
-    <div id="app"></div>
-    <h1>Home</h1>
-    <a href="/login.html" >LoginPage</a>
-    <a href="/signup.html">SignupPage</a>
-    <script type="module" src="/src/main.jsx"></script>
+    <div id="app">
+      <img src="/hero-img.png" alt="Opinia Posts" id="hero-img" />
+      <h1 class="hero-title impact">The modern way to share your opinion</h1>
+      <p class="barlow-sc-regular hero-text">
+        Opinia makes it easy to share your opinions on music, movies, games —
+        whatever takes your fancy.
+      </p>
+      <div class="hero-buttons">
+        <a href="/login.html" class="button barlow-sc-semibold">Login</a>
+        <a href="/signup.html" class="button second barlow-sc-semibold"
+          >Sign Up</a
+        >
+      </div>
+    </div>
+  <script type="module" src="/src/main.js"></script>
   </body>
 </html>
