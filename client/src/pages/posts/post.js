@@ -1,6 +1,6 @@
 import { notify } from "../../utils/notification.js";
 
-const API_URL = "http://opinia.onrender.com";
+const API_URL = "http://opinia-1z72.onrender.com";
 
 // Get post ID from URL and make it accessible to all functions
 const urlParams = new URLSearchParams(window.location.search);

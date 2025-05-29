@@ -1,6 +1,6 @@
 import { notify } from "../../utils/notification.js";
 
-const API_URL = "http://opinia.onrender.com";
+const API_URL = "http://opinia-1z72.onrender.com";
 const loginForm = document.getElementById("loginForm");
 
 loginForm.addEventListener("submit", async (e) => {
