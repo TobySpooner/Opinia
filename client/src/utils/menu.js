@@ -22,12 +22,11 @@ export function initMenu() {
 
             let menuItems;
             if (response.ok) {
-                const { user } = await response.json();
                 menuItems = `
                     <li><a href="/index.html">Home</a></li>
                     <li><a href="/src/pages/users/users.html">Users</a></li>
                     <li><a href="/src/pages/tags/tags.html">Tags</a></li>
-                    <li><a href="/src/pages/account/account.html?id=${user.id}">Account</a></li>
+                    <li><a href="/src/pages/account/account.html">Account</a></li>
                 `;
             } else {
                 menuItems = `

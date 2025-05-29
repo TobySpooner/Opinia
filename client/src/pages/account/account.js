@@ -212,7 +212,7 @@ function setupAccountActions(userId) {
 
                     notify.success('Account deleted successfully');
                     setTimeout(() => {
-                        window.location.href = '/src/pages/home/home.html';
+                        window.location.href = '/index.html';
                     }, 2000);
                 } catch (error) {
                     console.error('Error deleting account:', error);
