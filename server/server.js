@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 // Development CORS configuration
-app.use(cors({
+app.use(cors({          
   origin: true, // Allow all origins in development
   credentials: true
 }));
@@ -152,6 +152,31 @@ app.post("/logout", (req, res) => {
     res.clearCookie("connect.sid"); // name of the session cookie
     res.json({ message: "Logged out successfully" });
   });
+});
+
+app.get('/posts', async (req, res) => {
+  try {
+    const q = await db.query('SELECT * FROM posts ORDER BY created_at DESC LIMIT 10');
+
+    const data = [];
+
+    for (const [_, v] of Object.entries(q.rows)) {
+      const user = await db.query(`SELECT * FROM user_with_roles WHERE id = ${v.user_id}`);
+
+      data.push({
+        ...v,
+        user: user.rows[0]
+      });
+    };
+
+    return res.json({
+      ok: true,
+      message: "Fetched posts successfully",
+      data: data
+    }).status(200);
+  } catch (e) {
+    console.log(`Error fetching posts: ${e}`);
+  };
 });
 
 // Middleware to check if user is admin

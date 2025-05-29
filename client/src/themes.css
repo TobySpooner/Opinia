@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
-:root[data-theme="light"] {
+:root[data-theme="light"] { /* light mode colours */
   --text: #040316;
   --background: #ebebeb;
   --background-l: #d7d7d7;
@@ -8,7 +8,7 @@
   --secondary: #605bbe;
   --accent: #58a0e4;
 }
-:root[data-theme="dark"] {
+:root[data-theme="dark"] { /* dark mode colours */
   --text: #eae9fc;
   --background: #141414;
   --background-l: #252525;
@@ -17,8 +17,17 @@
   --accent: #1b63a7;
 }
 
-.gradient-text {
+
+.gradient-text-h { /* horizontal gradient */
   background: linear-gradient(90deg, #BB18C3 0%, #1B63A7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  font-weight: bold;
+}
+.gradient-text-v { /* vertical gradient */
+  background: linear-gradient(180deg, #BB18C3 0%, #1B63A7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
