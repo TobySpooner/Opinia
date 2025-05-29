@@ -55,7 +55,7 @@ async function loadTags() {
         
         tagsList.innerHTML = '';
 
-        const response = await fetch(`${API_URL}/tags`, {
+        const response = await fetch(`${API_URL}/tags?includePending=true`, {
             credentials: 'include'
         });
         
@@ -76,14 +76,21 @@ async function loadTags() {
             return;
         }
 
+        // Sort tags: approved first, then pending
+        const sortedTags = tags.sort((a, b) => {
+            if (a.status === b.status) {
+                return new Date(b.created_at) - new Date(a.created_at);
+            }
+            return a.status === 'approved' ? -1 : 1;
+        });
+
         // Use Promise.all to wait for all tag elements to be created
         const tagElements = await Promise.all(
-            tags.map(tag => createTagElement(tag, tag.status === 'pending'))
+            sortedTags.map(tag => createTagElement(tag, tag.status === 'pending'))
         );
         
-        // Now append all created elements
         tagElements.forEach(element => {
-            tagsList.appendChild(element);
+            if (element) tagsList.appendChild(element);
         });
     } catch (error) {
         console.error('Error loading tags:', error);
@@ -106,7 +113,7 @@ async function createTagElement(tag, isPending) {
     let html = `
         <div class="tag-header">
             <div class="tag-title-container">
-                <h4 class="tag-title">${tag.tag_name}</h4>
+                <h4 class="tag-title">${tag.name}</h4>
                 ${isPending ? '<span class="tag-status">Pending Approval</span>' : 
                             '<span class="tag-status approved">Approved</span>'}
             </div>
@@ -125,11 +132,11 @@ async function createTagElement(tag, isPending) {
         <div class="tag-meta">
             <div class="tag-info">
                 <span class="tag-date">Created ${createdDate}</span>
-                <span class="tag-creator">by ${tag.created_by_username || 'Unknown'}</span>
+                <span class="tag-creator">by ${tag.created_by || 'Unknown'}</span>
             </div>
-            ${!isPending && tag.approved_by_username ? `
+            ${!isPending && tag.approved_by ? `
                 <div class="tag-approved-by">
-                    <span>Approved by ${tag.approved_by_username}</span>
+                    <span>Approved by ${tag.approved_by}</span>
                 </div>
             ` : ''}
         </div>
