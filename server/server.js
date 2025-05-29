@@ -4,9 +4,15 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import session from "express-session";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // Load environment variables first
 dotenv.config();
+
+// Get directory name in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
@@ -31,6 +37,9 @@ app.use(
     },
   })
 );
+
+// Serve static files from the client directory
+app.use(express.static(path.join(__dirname, '../client')));
 
 // Database configuration
 const db = new pg.Pool({
@@ -156,27 +165,48 @@ app.post("/logout", (req, res) => {
 
 app.get('/posts', async (req, res) => {
   try {
-    const q = await db.query('SELECT * FROM posts ORDER BY created_at DESC LIMIT 10');
+    // Get posts with user and tag information using proper joins
+    const query = `
+      SELECT 
+        p.post_id,
+        p.post_title,
+        p.post_content,
+        p.created_at,
+        p.post_likes,
+        u.username,
+        u.profile_pic,
+        ARRAY_AGG(t.tag_name) as tags,
+        COUNT(DISTINCT c.id) as comment_count
+      FROM posts p
+      LEFT JOIN accounts u ON p.user_id = u.id
+      LEFT JOIN post_tags pt ON p.post_id = pt.post_id
+      LEFT JOIN tags t ON pt.tag_id = t.id
+      LEFT JOIN comments c ON p.post_id = c.post_id
+      GROUP BY p.post_id, p.post_title, p.post_content, p.created_at, p.post_likes, u.username, u.profile_pic
+      ORDER BY p.created_at DESC
+      LIMIT 20
+    `;
 
-    const data = [];
+    const result = await db.query(query);
+    
+    // Format posts for client
+    const posts = result.rows.map(row => ({
+      id: row.post_id,
+      title: row.post_title,
+      content: row.post_content,
+      created_at: row.created_at,
+      likes: row.post_likes || 0,
+      comment_count: parseInt(row.comment_count) || 0,
+      username: row.username,
+      profile_pic: row.profile_pic,
+      tags: row.tags.filter(tag => tag !== null) // Remove null tags
+    }));
 
-    for (const [_, v] of Object.entries(q.rows)) {
-      const user = await db.query(`SELECT * FROM user_with_roles WHERE id = ${v.user_id}`);
-
-      data.push({
-        ...v,
-        user: user.rows[0]
-      });
-    };
-
-    return res.json({
-      ok: true,
-      message: "Fetched posts successfully",
-      data: data
-    }).status(200);
-  } catch (e) {
-    console.log(`Error fetching posts: ${e}`);
-  };
+    res.json(posts);
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 // Middleware to check if user is admin
@@ -205,20 +235,38 @@ const isAdmin = async (req, res, next) => {
 // Get tags (with optional pending for admins)
 app.get("/tags", async (req, res) => {
     try {
-        // Join with accounts to get creator information
-        const query = `
-            SELECT t.*, 
+        const isAdmin = req.session.user && req.session.user.role === 'admin';
+        
+        // Base query for approved tags
+        let query = `
+            SELECT t.id, t.tag_name, t.description, t.status,
                    c.username as created_by_username,
                    a.username as approved_by_username
             FROM tags t
             LEFT JOIN accounts c ON t.created_by = c.id
-            LEFT JOIN accounts a ON t.approved_by = a.id`;
+            LEFT JOIN accounts a ON t.approved_by = a.id
+            WHERE t.status = 'approved'`;
 
-        console.log('Executing query:', query);
+        // If admin, include pending tags
+        if (isAdmin && req.query.includePending === 'true') {
+            query = query.replace('WHERE t.status = \'approved\'', '');
+        }
+
+        query += ' ORDER BY t.tag_name ASC';
+
         const result = await db.query(query);
-        console.log('Query results:', result.rows);
+        
+        // Format tags for client
+        const tags = result.rows.map(tag => ({
+            id: tag.id,
+            name: tag.tag_name,
+            description: tag.description,
+            status: tag.status,
+            created_by: tag.created_by_username,
+            approved_by: tag.approved_by_username
+        }));
 
-        res.json(result.rows);
+        res.json(tags);
     } catch (err) {
         console.error("Error fetching tags:", err);
         res.status(500).json({ error: "Database error" });
@@ -541,5 +589,101 @@ app.get("/users", async (req, res) => {
         console.error("Error fetching users:", err);
         res.status(500).json({ error: "Database error" });
     }
+});
+
+// Create a new post
+app.post('/posts', async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Must be logged in to create posts" });
+  }
+
+  try {
+    const { post_title, post_content, tag_ids } = req.body;
+
+    if (!post_title || !post_content || !tag_ids || !tag_ids.length) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Start a transaction
+    await db.query('BEGIN');
+
+    try {
+      // Create the post
+      const postResult = await db.query(
+        `INSERT INTO posts (post_title, post_content, user_id, created_at)
+         VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+         RETURNING post_id`,
+        [post_title, post_content, req.session.user.id]
+      );
+
+      const postId = postResult.rows[0].post_id;
+
+      // Add tags to post_tags table
+      for (const tagId of tag_ids) {
+        await db.query(
+          `INSERT INTO post_tags (post_id, tag_id)
+           VALUES ($1, $2)`,
+          [postId, tagId]
+        );
+      }
+
+      // Commit transaction
+      await db.query('COMMIT');
+
+      // Fetch the complete post with tags
+      const query = `
+        SELECT 
+          p.post_id,
+          p.post_title,
+          p.post_content,
+          p.created_at,
+          p.post_likes,
+          u.username,
+          u.profile_pic,
+          ARRAY_AGG(t.tag_name) as tags,
+          0 as comment_count
+        FROM posts p
+        LEFT JOIN accounts u ON p.user_id = u.id
+        LEFT JOIN post_tags pt ON p.post_id = pt.post_id
+        LEFT JOIN tags t ON pt.tag_id = t.id
+        WHERE p.post_id = $1
+        GROUP BY p.post_id, p.post_title, p.post_content, p.created_at, p.post_likes, u.username, u.profile_pic
+      `;
+
+      const result = await db.query(query, [postId]);
+      
+      const post = {
+        id: result.rows[0].post_id,
+        title: result.rows[0].post_title,
+        content: result.rows[0].post_content,
+        created_at: result.rows[0].created_at,
+        likes: result.rows[0].post_likes || 0,
+        comment_count: 0,
+        username: result.rows[0].username,
+        profile_pic: result.rows[0].profile_pic,
+        tags: result.rows[0].tags.filter(tag => tag !== null)
+      };
+
+      res.status(201).json(post);
+    } catch (err) {
+      // If anything fails, roll back the transaction
+      await db.query('ROLLBACK');
+      throw err;
+    }
+  } catch (err) {
+    console.error('Error creating post:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// Handle 404s by sending JSON instead of HTML
+app.use((req, res) => {
+  res.status(404).json({ error: "Not Found" });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Internal Server Error" });
 });
 
