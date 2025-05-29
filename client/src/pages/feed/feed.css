@@ -30,3 +30,10 @@ header {
 #logo-img {
   max-height: 6vh;
 }
+
+#posts {
+  width: 70%;
+  background-color: var(--background-l);
+  padding: 0% 5%;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+}
