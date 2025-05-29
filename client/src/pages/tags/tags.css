@@ -117,28 +117,196 @@ h2 {
 
 .tag-item {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: 1rem;
+    border-radius: 12px;
+    padding: 1.5rem;
     margin-bottom: 1rem;
-    transition: transform 0.2s, background 0.2s;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.tag-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,#BB18C3 0%, #1B63A7 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tag-item:hover::before {
+    opacity: 1;
 }
 
 .tag-item:hover {
-    transform: translateX(4px);
+    transform: translateY(-2px);
     background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.tag-item h4 {
-    margin: 0 0 0.5rem 0;
-    color: white;
-    font-size: 1.1rem;
+.tag-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
 }
 
-.tag-item p {
+.tag-title-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.tag-title {
+    font-size: 1.25rem;
     margin: 0;
+    color: white;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tag-description {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
-    line-height: 1.4;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    font-size: 0.95rem;
+}
+
+.tag-info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.tag-date::before {
+    content: '🕒';
+    margin-right: 0.5rem;
+}
+
+.tag-creator::before {
+    content: '👤';
+    margin-right: 0.5rem;
+}
+
+.tag-approved-by {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.tag-approved-by::before {
+    content: '✓';
+    color: #4CAF50;
+}
+
+.tag-status.approved {
+    background: linear-gradient(90deg,rgba(76, 175, 80, 0.1) 0%, rgba(27, 99, 167, 0.1) 100%);
+    color: #4CAF50;
+}
+
+.tag-status {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background: linear-gradient(90deg,rgba(187, 24, 195, 0.1) 0%, rgba(27, 99, 167, 0.1) 100%);
+    color: white;
+}
+
+.tag-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.tag-creator {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.tag-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.tag-btn {
+    padding: 0.4rem 0.75rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+}
+
+.approve-btn {
+    background: linear-gradient(90deg,#BB18C3 0%, #1B63A7 100%);
+    color: white;
+}
+
+.reject-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.delete-btn {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    padding: 0.4rem 0.75rem;
+}
+
+.delete-btn:hover {
+    background: rgba(220, 53, 69, 0.2);
+    color: #ff4757;
+}
+
+.delete-btn::before {
+    content: "🗑";
+    font-size: 0.9em;
+    margin-right: 0.2rem;
+}
+
+.tag-btn:hover {
+    transform: translateY(-1px);
+}
+
+.approve-btn:hover {
+    opacity: 0.9;
+}
+
+.reject-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Add icons for approve/reject */
+.approve-btn::before {
+    content: "✓";
+    font-size: 0.9em;
+}
+
+.reject-btn::before {
+    content: "×";
+    font-size: 1.2em;
 }
 
 .tags-creation-container {
@@ -265,4 +433,94 @@ h2 {
     .tags-creation-container {
         padding: 1rem;
     }
+}
+
+.no-tags,
+.error-message {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.no-tags::before {
+    content: "🏷️";
+    font-size: 2rem;
+}
+
+.error-message {
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    background: rgba(220, 53, 69, 0.05);
+}
+
+.error-message::before {
+    content: "⚠️";
+    font-size: 2rem;
+}
+
+/* Notification System */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    background: rgb(20, 20, 20);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform: translateX(120%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification-icon {
+    font-size: 1.2em;
+}
+
+.notification-text {
+    flex: 1;
+}
+
+.notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg,#BB18C3 0%, #1B63A7 100%);
+    width: 100%;
+    transform-origin: left;
+    animation: progress 3s linear;
+}
+
+@keyframes progress {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+.notification-success .notification-icon {
+    color: #4CAF50;
+}
+
+.notification-error .notification-icon {
+    color: #f44336;
+}
+
+.notification-info .notification-icon {
+    color: #2196F3;
 }
