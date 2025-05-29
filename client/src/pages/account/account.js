@@ -1,6 +1,6 @@
 import { notify } from "../../utils/notification.js";
 
-const API_URL = "http://opinia.onrender.com";
+const API_URL = "http://opinia-1z72.onrender.com";
 
 // DOM Elements
 const accountContainer = document.querySelector(".account-container");

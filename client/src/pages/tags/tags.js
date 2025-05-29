@@ -6,7 +6,7 @@ const tagsList = document.getElementById("tagslist");
 const tagNameInput = document.getElementById("tagName");
 const tagDescriptionInput = document.getElementById("tagDescription");
 
-const API_URL = "http://opinia.onrender.com";
+const API_URL = "http://opinia-1z72.onrender.com";
 
 // Check if user is admin
 async function checkIsAdmin() {
