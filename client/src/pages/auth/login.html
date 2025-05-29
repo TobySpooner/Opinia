@@ -5,7 +5,6 @@
         <link rel="icon" type="image/png" href="../../assets/media/icons/Opinia.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="../../styles/notifications.css">
-        <link rel="stylesheet" href="/src/styles/menu.css">
         <link rel="stylesheet" href="login.css">
         <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700,900&display=swap" rel="stylesheet">
         <title>Opinia</title>
@@ -13,37 +12,34 @@
     <body>
         <div id="main"></div>
         <div id="nav">
-            <img id="navImg" src="../../assets/media/icons/OpiniaLogoBig.svg">
+            <img id="navImg" src="../../assets/media/icons/Opinia.svg">
             <h2><span class="gradient-text"><b>Opinia</b></span></h2>
         </div>
 
-        <div id="loginContainer">
-            <div>
-                <img id="containerImg" src="../../assets/media/icons/Opinia.svg">
-                <h2 id="loginTitle">Login to <span class="gradient-text">Opinia</span></h2>
-                <form>
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username">
+    <div id="loginContainer">
+        <div>
+            <img id="containerImg" src="../../assets/media/icons/Opinia.svg">
+            <h2 id="loginTitle">Login to <span class="gradient-text">Opinia</span></h2>
+            <form>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username">
 
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password">
-                    
-                    <button type="submit" class="btn">
-                        Login
-                        <div class="btn2"></div>
-                    </button>
-                </form>
-            </div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
 
-            <p id="alreadyOwn">Not got an account? <a href="signup.html"><span class="gradient-text">Signup</span></a></p>
+                <button type="submit" class="btn">
+                    Login
+                    <div class="btn2"></div>
+                </button>
+            </form>
         </div>
-        <!-- <h1>SignupPage</h1>
+
+        <p id="no-Account">Not got an account? <a href="./signup.html"><span class="gradient-text">Signup</span></a>
+        </p>
+    </div>
+    <!-- <h1>SignupPage</h1>
         <a href="/index.html">HomePage</a>
         <a href="/login.html">LoginPage</a> -->
-        <script type="module">
-            import { initMenu } from '/src/utils/menu.js';
-            initMenu();
-        </script>
-        <script type="module" src="login.js"></script>
+        <script type="module" src="../../main.js"></script>
     </body>
 </html>
