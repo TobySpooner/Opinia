@@ -1,10 +1,12 @@
-@import url("./src/themes.css");
-
 html,
 body {
   margin: 0;
   overflow-x: hidden;
   background-color: var(--background);
+}
+
+a {
+  text-decoration: none;
 }
 
 header {
@@ -33,14 +35,14 @@ header div h1 {
 }
 
 main {
-  min-height: 100vh;
+  min-height: fit-content;
   width: 100%;
   display: flex;
   gap: 1rem;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 7rem;
+  margin: 1.5rem 0rem 7rem;
   background-color: var(--background);
   color: var(--text);
 }
@@ -98,7 +100,7 @@ nav {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 1rem 0rem;
   background-color: var(--text);
   color: var(--background);
 }
@@ -121,21 +123,69 @@ nav a:last-of-type {
   left: 50%;
   top: -25%;
   z-index: 2;
-  transform: translate(-50%, -25%);
+  transform: translate(-50%, -40%);
   justify-self: center;
   cursor: pointer;
 }
+
+/* #search {
+  display: none;
+}
+
+#searchbar {
+  border-radius: 1000px;
+  width: fit-content;
+  min-width: 25%;
+  background-color: var(--text-l);
+  color: var(--background);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+} */
 
 @media only screen and (width > 500px) {
   .hero-buttons {
     width: 50%;
   }
-}
-@media only screen and (width > 650px) {
+  nav {
+    display: none;
+  }
+  #search {
+    display: inline;
+  }
   #hero-img {
     width: 70%;
   }
+}
+
+@media only screen and (width > 650px) {
+  #hero-img {
+    width: 60%;
+  }
   html {
     font-size: 20px;
+  }
+}
+
+@media only screen and (width >= 800px) {
+  #hero-img {
+    width: 50%;
+  }
+}
+
+@media only screen and (width >= 1000px) {
+  #hero-img {
+    content: url("./src/assets/media/images/hero-img-wide.png");
+    width: 90%;
+    padding-bottom: 1rem;
+  }
+  #hero-buttons {
+    width: 30%;
+  }
+  main {
+    margin-top: 5rem;
+  }
+  #hero-title {
+    font-size: 3rem;
   }
 }
