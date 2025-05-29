@@ -7,7 +7,7 @@ import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const express = require('express');
+// const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 3000;
 
