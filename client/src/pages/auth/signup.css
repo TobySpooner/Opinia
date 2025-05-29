@@ -9,29 +9,6 @@ h2 {
     margin: 0;
 }
 
-@-webkit-keyframes anime {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-@keyframes anime {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
 @media (max-width: 340px) {
     body > * {
         display: none !important;
@@ -116,6 +93,7 @@ h2 {
         background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
         background-size: 600%;
         -webkit-animation: anime 16s linear infinite;
+        animation: anime 16s linear infinite;
         border:0;
     }
 
@@ -141,7 +119,6 @@ h2 {
             background-position: 0% 50%;
         }
     }
-
     @keyframes anime {
         0% {
             background-position: 0% 50%;
@@ -273,6 +250,7 @@ h2 {
         background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
         background-size: 600%;
         -webkit-animation: anime 16s linear infinite;
+        animation: anime 16s linear infinite;
         border:0;
     }
 
@@ -283,6 +261,33 @@ h2 {
         z-index: -1;
         filter: blur(12px);
         opacity: 0.8;
+    }
+
+    @-webkit-keyframes anime {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    @keyframes anime {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
 
     #account {
@@ -403,6 +408,7 @@ h2 {
         background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
         background-size: 600%;
         -webkit-animation: anime 16s linear infinite;
+        animation: anime 16s linear infinite;
         border:0;
     }
 
@@ -413,6 +419,33 @@ h2 {
         z-index: -1;
         filter: blur(14px);
         opacity: 0.8;
+    }
+
+    @-webkit-keyframes anime {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    @keyframes anime {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
 
     #account {
@@ -533,6 +566,7 @@ h2 {
         background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
         background-size: 600%;
         -webkit-animation: anime 16s linear infinite;
+        animation: anime 16s linear infinite;
         border:0;
     }
 
@@ -543,6 +577,33 @@ h2 {
         z-index: -1;
         filter: blur(16px);
         opacity: 0.8;
+    }
+
+    @-webkit-keyframes anime {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    @keyframes anime {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
 
     #account {
@@ -588,16 +649,6 @@ h2 {
         color: transparent;
         font-weight: bold;
     }
-}
-
-
-.gradient-text-h {
-    background: linear-gradient(90deg,#BB18C3 0%, #1B63A7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-    font-weight: bold;
 }
 
 @media (min-width: 1201px) and (max-width:1920px) {
@@ -674,7 +725,8 @@ h2 {
         background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
         background-size: 600%;
         -webkit-animation: anime 16s linear infinite;
-        border:0;
+        animation: anime 16s linear infinite;
+        border:0;   
     }
 
     body .btn2 {
@@ -684,6 +736,33 @@ h2 {
         z-index: -1;
         filter: blur(18px);
         opacity: 0.8;
+    }
+
+    @-webkit-keyframes anime {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    @keyframes anime {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
 
     #account {
@@ -732,3 +811,10 @@ h2 {
     }
 }
 
+body .btn:hover {
+    cursor: pointer;
+}
+body .btn2:hover {
+    cursor: pointer;
+    z-index: 1;
+}
