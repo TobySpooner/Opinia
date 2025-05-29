@@ -3,7 +3,11 @@
 <html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/src/assets/media/icons/Opinia.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="./src/assets/media/icons/Opinia.png"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Opinia</title>
     <link rel="stylesheet" href="/src/themes.css" />
@@ -33,39 +37,46 @@
     <script type="module" src="/src/main.js" defer></script>
   </head>
   <body>
-    <div id="nav">
-      <div class="nav-brand">
-        <img src="/src/assets/media/icons/Opinia.svg" alt="Opinia logo" />
-        <h2 class="gradient-text impact">Opinia</h2>
-
+    <header>
+      <div>
+        <img src="./src/assets/media/icons/Opinia.svg" alt="Opinia logo" />
+        <h1 class="gradient-text-h"><b>Opinia</b></h1>
       </div>
-    </div>
-
-    <nav>
-      <a class="impact" href="#">Home</a>
-      <a class="impact" href="#">Account</a>
-    
-      <img id="menu-btn" src="./src/assets/media/icons/menu.svg" alt="#" />
-    </nav>
+      <img id="pfp" src="#" alt="Your profile picture" />
+    </header>
 
     <main>
-      <img src="/src/assets/media/images/hero-img.png" alt="Opinia Posts" id="hero-img" />
-      <h1 id="hero-title" class="impact">The modern way to share your opinion</h1>
+      <img
+        src="./src/assets/media/images/hero-img.png"
+        alt="Opinia Posts"
+        id="hero-img"
+      />
+      <h1 id="hero-title"><b>The modern way to share your opinion</b></h1>
       <p id="hero-text" class="barlow-sc-regular">
         Opinia makes it easy to share your opinions on music, movies, games —
         whatever takes your fancy.
       </p>
       <div id="hero-buttons">
-        <a href="/src/pages/auth/login.html" class="cta barlow-sc-semibold">Login</a>
-        <a href="/src/pages/auth/signup.html" class="cta barlow-sc-semibold">
+        <a
+          href="./src/pages/auth/login.html"
+          class="cta gradient barlow-sc-semibold"
+          >Login</a
+        >
+        <a href="./src/pages/auth/signup.html" class="cta barlow-sc-semibold">
           Sign Up
         </a>
       </div>
     </main>
+
+    <nav>
+      <a class="impact" href="#">Home</a>
+      <a class="impact" href="#">Account</a>
+
+      <img id="menu-btn" src="./src/assets/media/icons/menu.svg" alt="#" />
+    </nav>
     <script type="module">
-      import { initMenu } from '/src/utils/menu.js';
+      import { initMenu } from "/src/utils/menu.js";
       initMenu();
     </script>
-
   </body>
 </html>
