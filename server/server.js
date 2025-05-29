@@ -8,7 +8,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // const express = require('express');
-const path = require('path');
+// const path = require('path');
 const PORT = process.env.PORT || 3000;
 
 // Serve static files from the 'dist' folder
