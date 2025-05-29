@@ -1,0 +1,32 @@
+html,
+body {
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: var(--background);
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--text);
+}
+
+#logo {
+  display: flex;
+  align-items: center;
+  max-height: 8vh;
+  gap: 0.5em;
+  margin-left: 1rem;
+}
+#logo-img {
+  max-height: 6vh;
+}

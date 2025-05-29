@@ -1,22 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="../../../index.css">
-    <link rel="stylesheet" href="./feed.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en" data-theme="light">
+  <head>
+    <link
+      rel="icon"
+      type="image/png"
+      href="./src/assets/media/icons/Opinia.png"
+    />
+    <link rel="stylesheet" href="/src/themes.css" />
+    <link rel="stylesheet" href="./feed.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Opinia - Your Feed</title>
     <script src="./feed.js" defer></script>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <div>
-            <img
-                src="../../assets/media/icons/"
-                alt="Opinia logo"
-            />
-            <h1>Opinia</h1>
-        </div>
+      <div id="logo">
+        <img
+          src="../../assets/media/icons/Opinia.svg"
+          alt="Opinia logo"
+          id="logo-img"
+        />
+        <h1 class="gradient-text">Opinia</h1>
+      </div>
     </header>
-</body>
+
+    <main>
+      <h1 id="post-description">Suggested for you</h1>
+      <div id="posts"></div>
+    </main>
+  </body>
 </html>
