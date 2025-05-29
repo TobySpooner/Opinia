@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/styles/notifications.css">
+    <link rel="stylesheet" href="/src/styles/menu.css">
+    <link rel="stylesheet" href="users.css">
+    <title>Opinia - Users</title>
+</head>
+<body>
+    <div id="nav">
+        <img id="navImg" src="/src/assets/media/icons/OpiniaLogoBig.svg">
+        <h2><span class="gradient-text">Opinia</span></h2>
+    </div>
+
+    <div class="main-container">
+        <div class="users-container">
+            <div class="users-header">
+                <h1 class="gradient-text">Users</h1>
+                <div class="filters">
+                    <button class="filter-btn active" data-role="all">All Users</button>
+                    <button class="filter-btn" data-role="Developer">Developers</button>
+                    <button class="filter-btn" data-role="Administrator">Administrators</button>
+                    <button class="filter-btn" data-role="User">Regular Users</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search users...">
+                </div>
+            </div>
+
+            <div class="users-grid" id="usersGrid">
+                <!-- User cards will be dynamically inserted here -->
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading users...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initMenu } from '/src/utils/menu.js';
+        initMenu();
+    </script>
+    <script type="module" src="users.js"></script>
+</body>
+</html> 

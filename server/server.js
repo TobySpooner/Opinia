@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 // Development CORS configuration
-app.use(cors({
+app.use(cors({          
   origin: true, // Allow all origins in development
   credentials: true
 }));
@@ -24,9 +24,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === 'production',  // Only use secure in production
+      secure: false,  // Set to false for development (http)
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24
+      maxAge: 1000 * 60 * 60 * 24,
+      sameSite: 'lax'
     },
   })
 );
@@ -126,10 +127,6 @@ app.get("/me", (req, res) => {
 
 // Get user role
 app.get("/users/:id/role", async (req, res) => {
-  if (!req.session.user) {
-    return res.status(401).json({ error: "Not logged in" });
-  }
-
   try {
     const result = await db.query(
       `SELECT role_name FROM user_with_roles WHERE id = $1`,
@@ -155,6 +152,31 @@ app.post("/logout", (req, res) => {
     res.clearCookie("connect.sid"); // name of the session cookie
     res.json({ message: "Logged out successfully" });
   });
+});
+
+app.get('/posts', async (req, res) => {
+  try {
+    const q = await db.query('SELECT * FROM posts ORDER BY created_at DESC LIMIT 10');
+
+    const data = [];
+
+    for (const [_, v] of Object.entries(q.rows)) {
+      const user = await db.query(`SELECT * FROM user_with_roles WHERE id = ${v.user_id}`);
+
+      data.push({
+        ...v,
+        user: user.rows[0]
+      });
+    };
+
+    return res.json({
+      ok: true,
+      message: "Fetched posts successfully",
+      data: data
+    }).status(200);
+  } catch (e) {
+    console.log(`Error fetching posts: ${e}`);
+  };
 });
 
 // Middleware to check if user is admin
@@ -440,12 +462,14 @@ app.get("/users/:id/posts", async (req, res) => {
     }
 
     const result = await db.query(
-      `SELECT posts.*, 
-              COUNT(DISTINCT comments.id) as comment_count
+      `SELECT posts.post_id as id, 
+              posts.post_title as title,
+              posts.post_content as content,
+              posts.created_at,
+              posts.post_likes as likes,
+              posts.post_comments as comment_count
        FROM posts
-       LEFT JOIN comments ON comments.post_id = posts.id
        WHERE posts.user_id = $1
-       GROUP BY posts.id
        ORDER BY posts.created_at DESC`,
       [req.params.id]
     );
@@ -471,7 +495,11 @@ app.get("/users/:id/comments", async (req, res) => {
     }
 
     const result = await db.query(
-      `SELECT comments.*
+      `SELECT comments.id,
+              comments.content,
+              comments.created_at,
+              comments.like_count as likes,
+              comments.post_id
        FROM comments
        WHERE comments.user_id = $1
        ORDER BY comments.created_at DESC`,
@@ -483,5 +511,35 @@ app.get("/users/:id/comments", async (req, res) => {
     console.error("Error fetching user comments:", err);
     res.status(500).json({ error: "Database error" });
   }
+});
+
+// Get all users with roles
+app.get("/roles/all", async (req, res) => {
+    try {
+        const result = await db.query(
+            `SELECT a.id as user_id, r.role_name
+             FROM accounts a
+             JOIN roles r ON a.role_id = r.id`
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching user roles:", err);
+        res.status(500).json({ error: "Database error" });
+    }
+});
+
+// Get all users (basic info)
+app.get("/users", async (req, res) => {
+    try {
+        const result = await db.query(
+            `SELECT id, username, bio, karma
+             FROM accounts
+             ORDER BY karma DESC, username ASC`
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching users:", err);
+        res.status(500).json({ error: "Database error" });
+    }
 });
 

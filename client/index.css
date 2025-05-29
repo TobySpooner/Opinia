@@ -1,3 +1,12 @@
+
+@import url("./src/themes.css");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 html,
 body {
   margin: 0;
@@ -6,6 +15,15 @@ body {
   font-family: "Inter", Arial, Helvetica, sans-serif;
 }
 
+
+a, button {
+  cursor: pointer;
+}
+
+button {
+  border: none;
+  background: none;
+}
 a {
   text-decoration: none;
 }
@@ -30,11 +48,6 @@ header div img {
   height: 2rem;
 }
 
-header div h1 {
-  color: #be7fd9;
-  margin: 0;
-}
-
 main {
   min-height: fit-content;
   width: 100%;
@@ -42,6 +55,7 @@ main {
   gap: 1rem;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 7rem;
   justify-content: center;
   margin: 1.5rem 0rem 7rem;
   background-color: var(--background);
@@ -110,7 +124,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 0rem;
-  background-color: var(--text);
+  background-color: black;
   color: var(--background);
 }
 nav a {
@@ -155,9 +169,6 @@ nav a:last-of-type {
 @media only screen and (width > 500px) {
   .hero-buttons {
     width: 50%;
-  }
-  nav {
-    display: none;
   }
   #search {
     display: inline;

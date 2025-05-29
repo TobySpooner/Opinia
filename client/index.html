@@ -10,9 +10,31 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Opinia</title>
-    <link rel="stylesheet" href="./src/themes.css" />
-    <link rel="stylesheet" href="./index.css" />
-    <script type="module" src="./src/main.js" defer></script>
+    <link rel="stylesheet" href="/src/themes.css" />
+    <link rel="stylesheet" href="/src/styles/menu.css" />
+    <link rel="stylesheet" href="/index.css" />
+    <style>
+      #nav {
+        background-color: black;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .nav-brand img {
+        height: 2rem;
+      }
+      .nav-brand h2 {
+        margin: 0;
+        color: white;
+      }
+    </style>
+    <script type="module" src="/src/main.js" defer></script>
   </head>
   <body>
     <header>
@@ -20,7 +42,6 @@
         <img src="./src/assets/media/icons/Opinia.svg" alt="Opinia logo" />
         <h1 class="gradient-text"><b>Opinia</b></h1>
       </div>
-
       <img id="pfp" src="#" alt="Your profile picture" />
     </header>
 
@@ -53,5 +74,9 @@
 
       <img id="menu-btn" src="./src/assets/media/icons/menu.svg" alt="#" />
     </nav>
+    <script type="module">
+      import { initMenu } from "/src/utils/menu.js";
+      initMenu();
+    </script>
   </body>
 </html>

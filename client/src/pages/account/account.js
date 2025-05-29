@@ -22,6 +22,19 @@ const deleteAccountBtn = document.getElementById('deleteAccountBtn');
 const urlParams = new URLSearchParams(window.location.search);
 const targetUserId = urlParams.get('id');
 
+// Store the logged-in user's ID
+let loggedInUserId = null;
+
+// Modal Elements
+const editProfileModal = document.getElementById('editProfileModal');
+const changePasswordModal = document.getElementById('changePasswordModal');
+const editProfileForm = document.getElementById('editProfileForm');
+const changePasswordForm = document.getElementById('changePasswordForm');
+const bioInput = document.getElementById('bioInput');
+const charCount = document.querySelector('.char-count');
+const closeButtons = document.querySelectorAll('.close-modal');
+const cancelButtons = document.querySelectorAll('.cancel-btn');
+
 // Format date to relative time
 function formatRelativeTime(dateString) {
     const date = new Date(dateString);
@@ -50,50 +63,86 @@ function getInitials(username) {
         .slice(0, 2);
 }
 
+// Modal Functions
+function openModal(modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Close modal when clicking outside
+function handleOutsideClick(e, modal) {
+    if (e.target === modal) {
+        closeModal(modal);
+    }
+}
+
+// Update character count for bio
+function updateCharCount() {
+    const current = bioInput.value.length;
+    charCount.textContent = `${current}/200`;
+}
+
 // Handle account management actions
-function setupAccountActions() {
-    editProfileBtn.addEventListener('click', async () => {
-        const newBio = prompt('Enter your new bio:', bioElement.textContent);
-        if (newBio !== null) {
-            try {
-                const response = await fetch(`${API_URL}/users/${window.userId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({ bio: newBio })
-                });
+function setupAccountActions(userId) {
+    editProfileBtn.addEventListener('click', () => {
+        bioInput.value = bioElement.textContent;
+        updateCharCount();
+        openModal(editProfileModal);
+    });
 
-                if (!response.ok) {
-                    throw new Error('Failed to update profile');
-                }
+    changePasswordBtn.addEventListener('click', () => {
+        changePasswordForm.reset();
+        openModal(changePasswordModal);
+    });
 
-                const updatedUser = await response.json();
-                bioElement.textContent = updatedUser.bio;
-                notify.success('Profile updated successfully');
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                notify.error('Failed to update profile');
+    // Edit Profile Form Submit
+    editProfileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newBio = bioInput.value.trim();
+
+        try {
+            const response = await fetch(`${API_URL}/users/${userId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ bio: newBio })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update profile');
             }
+
+            const updatedUser = await response.json();
+            bioElement.textContent = updatedUser.bio;
+            notify.success('Profile updated successfully');
+            closeModal(editProfileModal);
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            notify.error('Failed to update profile');
         }
     });
 
-    changePasswordBtn.addEventListener('click', async () => {
-        const currentPassword = prompt('Enter your current password:');
-        if (!currentPassword) return;
+    // Change Password Form Submit
+    changePasswordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
 
-        const newPassword = prompt('Enter your new password:');
-        if (!newPassword) return;
-
-        const confirmPassword = prompt('Confirm your new password:');
         if (newPassword !== confirmPassword) {
             notify.error('Passwords do not match');
             return;
         }
 
         try {
-            const response = await fetch(`${API_URL}/users/${window.userId}/change-password`, {
+            const response = await fetch(`${API_URL}/users/${userId}/change-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -108,11 +157,33 @@ function setupAccountActions() {
             }
 
             notify.success('Password changed successfully');
+            closeModal(changePasswordModal);
+            changePasswordForm.reset();
         } catch (error) {
             console.error('Error changing password:', error);
             notify.error(error.message);
         }
     });
+
+    // Bio character count
+    bioInput.addEventListener('input', updateCharCount);
+
+    // Close modal handlers
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            closeModal(button.closest('.modal'));
+        });
+    });
+
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            closeModal(button.closest('.modal'));
+        });
+    });
+
+    // Close on outside click
+    editProfileModal.addEventListener('click', (e) => handleOutsideClick(e, editProfileModal));
+    changePasswordModal.addEventListener('click', (e) => handleOutsideClick(e, changePasswordModal));
 
     privacySettingsBtn.addEventListener('click', () => {
         notify.info('Privacy settings feature coming soon!');
@@ -130,7 +201,7 @@ function setupAccountActions() {
             
             if (doubleConfirmed) {
                 try {
-                    const response = await fetch(`${API_URL}/users/${window.userId}`, {
+                    const response = await fetch(`${API_URL}/users/${userId}`, {
                         method: 'DELETE',
                         credentials: 'include'
                     });
@@ -141,7 +212,7 @@ function setupAccountActions() {
 
                     notify.success('Account deleted successfully');
                     setTimeout(() => {
-                        window.location.href = '/';
+                        window.location.href = '/index.html';
                     }, 2000);
                 } catch (error) {
                     console.error('Error deleting account:', error);
@@ -174,74 +245,71 @@ async function loadUserData() {
             credentials: 'include'
         });
 
-        let loggedInUserId = null;
-        if (meResponse.ok) {
-            const { user } = await meResponse.json();
-            loggedInUserId = user.id;
-        }
-
-        // Determine which user to load
-        const userToLoad = targetUserId || loggedInUserId;
-        
-        if (!userToLoad) {
-            throw new Error('Not logged in');
-        }
-
-        // Get user details including role
-        const [userDetailsResponse, roleResponse] = await Promise.all([
-            fetch(`${API_URL}/users/${userToLoad}`, { credentials: 'include' }),
-            fetch(`${API_URL}/users/${userToLoad}/role`, { credentials: 'include' })
-        ]);
-
-        if (userDetailsResponse.status === 404 || roleResponse.status === 404) {
-            showUserNotFound();
+        if (!meResponse.ok) {
+            window.location.href = '/src/pages/auth/login.html';
             return;
         }
 
-        if (!userDetailsResponse.ok || !roleResponse.ok) {
+        const { user } = await meResponse.json();
+        loggedInUserId = user.id; // Store the logged-in user's ID
+
+        // Determine which user to load
+        const userId = targetUserId || loggedInUserId;
+        
+        if (!userId) {
+            window.location.href = '/src/pages/auth/login.html';
+            return;
+        }
+
+        // Load user details
+        const userResponse = await fetch(`${API_URL}/users/${userId}`, {
+            credentials: 'include'
+        });
+
+        if (!userResponse.ok) {
             throw new Error('Failed to fetch user details');
         }
 
-        const userDetails = await userDetailsResponse.json();
-        const { role_name } = await roleResponse.json();
+        const userData = await userResponse.json();
 
-        // Update UI with user data
-        document.title = `Opinia - ${userDetails.username}'s Profile`;
-        usernameElement.textContent = userDetails.username;
-        bioElement.textContent = userDetails.bio || 'No bio yet';
-        
-        // Set up profile picture with initials
-        profilePictureElement.textContent = getInitials(userDetails.username);
-        
-        // Set up role badge with animation
-        roleBadgeElement.textContent = role_name;
-        roleBadgeElement.className = `role-badge ${role_name.toLowerCase()}`;
+        // Load user role
+        const roleResponse = await fetch(`${API_URL}/users/${userId}/role`, {
+            credentials: 'include'
+        });
 
-        // Set up karma badge
-        karmaCountElement.textContent = userDetails.karma || 0;
-
-        // Show/hide account management for profile owner
-        const isOwner = loggedInUserId === parseInt(userToLoad);
-        accountContainer.dataset.isOwner = isOwner;
-
-        if (isOwner) {
-            setupAccountActions();
+        if (!roleResponse.ok) {
+            throw new Error('Failed to fetch user role');
         }
 
-        // Load user's content
+        const roleData = await roleResponse.json();
+
+        // Update UI with user data
+        document.title = `Opinia - ${userData.username}'s Profile`;
+        usernameElement.textContent = userData.username;
+        bioElement.textContent = userData.bio || 'No bio yet';
+        karmaCountElement.textContent = userData.karma || 0;
+        profilePictureElement.textContent = getInitials(userData.username);
+        roleBadgeElement.textContent = roleData.role_name;
+        roleBadgeElement.className = `role-badge ${roleData.role_name.toLowerCase()}`;
+
+        // Show/hide account management buttons if viewing own profile
+        const accountActions = document.querySelector('.account-actions');
+        if (loggedInUserId === parseInt(userId)) {
+            accountActions.style.display = 'flex';
+            setupAccountActions(userId);
+        } else {
+            accountActions.style.display = 'none';
+        }
+
+        // Load posts and comments
         await Promise.all([
-            loadUserPosts(userToLoad),
-            loadUserComments(userToLoad)
+            loadUserPosts(userId),
+            loadUserComments(userId)
         ]);
 
     } catch (error) {
         console.error('Error loading user data:', error);
-        if (error.message === 'Not logged in' && !targetUserId) {
-            notify.error('Please log in to view your profile');
-            window.location.href = '/login.html';
-        } else {
-            notify.error('Failed to load user data');
-        }
+        showUserNotFound();
     }
 }
 

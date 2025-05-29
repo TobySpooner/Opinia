@@ -170,9 +170,116 @@ body {
     background-size: 200% 200%;
 }
 
+.role-badge.developer {
+    --gradient-start: #FF4D4D;
+    --gradient-mid: #FFD700;
+    --gradient-end: #00FF00;
+    background: linear-gradient(
+        90deg,
+        var(--gradient-start),
+        var(--gradient-mid),
+        var(--gradient-end)
+    );
+    background-size: 200% 200%;
+    animation: developerGradient 6s ease infinite;
+}
+
+@keyframes developerGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 .role-badge.administrator {
-    --gradient-start: #FF69B4;
-    --gradient-end: #FF1493;
+    --gradient-start: #FF0000;  /* Bright red */
+    --gradient-mid: #800000;    /* Dark red */
+    --gradient-end: #000000;    /* Black */
+    color: white;               /* Ensure text is white for readability */
+    background: linear-gradient(
+        90deg,
+        var(--gradient-start),
+        var(--gradient-mid),
+        var(--gradient-end)
+    );
+    background-size: 200% 200%;
+    animation: adminGradient 8s ease infinite;
+    position: relative;
+    overflow: hidden !important;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Add text shadow for better readability */
+}
+
+.role-badge.administrator::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: inherit;
+    filter: blur(8px);
+    opacity: 0.5;
+    z-index: -1;
+    animation: adminGlow 3s ease-in-out infinite alternate;
+}
+
+.role-badge.administrator::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 0, 0, 0.3),
+        transparent
+    );
+    transform: translateX(-100%);
+    animation: adminShimmer 3s infinite;
+    z-index: 1;
+}
+
+@keyframes adminGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    25% {
+        background-position: 100% 50%;
+    }
+    50% {
+        background-position: 50% 100%;
+    }
+    75% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 50% 0%;
+    }
+}
+
+@keyframes adminGlow {
+    0% {
+        filter: blur(8px) brightness(1);
+        opacity: 0.5;
+    }
+    50% {
+        filter: blur(12px) brightness(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        filter: blur(8px) brightness(1);
+        opacity: 0.5;
+    }
+}
+
+@keyframes adminShimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 .role-badge.user {
@@ -370,65 +477,63 @@ body {
 }
 
 .account-actions {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.actions-title {
-    font-size: 1.5rem;
-    margin: 0 0 1.5rem 0;
-    color: white;
-}
-
-.actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: flex;
+    flex-direction: row;
     gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
 }
 
-.action-card {
-    background: rgba(255, 255, 255, 0.03);
+.action-button {
+    flex: 1;
+    min-width: 200px;
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: 8px;
+    padding: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: left;
 }
 
-.action-card:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.05);
+.action-button:hover {
+    background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 
-.action-title {
-    font-size: 1.1rem;
-    color: white;
+.action-button h3 {
     margin: 0 0 0.5rem 0;
+    font-size: 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.action-description {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
+.action-button p {
     margin: 0;
-    line-height: 1.5;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
 }
 
-.action-card.danger {
-    border-color: rgba(255, 99, 71, 0.3);
+.action-button.delete {
+    border-color: rgba(255, 0, 0, 0.3);
 }
 
-.action-card.danger:hover {
-    background: rgba(255, 99, 71, 0.1);
-    border-color: rgba(255, 99, 71, 0.5);
+.action-button.delete:hover {
+    background: rgba(255, 0, 0, 0.1);
+    border-color: rgba(255, 0, 0, 0.4);
 }
 
-.action-card.danger .action-title {
-    color: #FF6347;
+@media screen and (max-width: 768px) {
+    .account-actions {
+        flex-direction: column;
+    }
+
+    .action-button {
+        width: 100%;
+    }
 }
 
 /* Responsive Design */
@@ -472,4 +577,143 @@ body {
         padding: 1rem;
         width: 100%;
     }
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+.modal-content {
+    background: rgb(20, 20, 20);
+    border-radius: 12px;
+    padding: 2rem;
+    width: min(90%, 500px);
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.close-modal {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.char-count {
+    display: block;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.submit-btn,
+.cancel-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn {
+    background: linear-gradient(90deg, #BB18C3, #1B63A7);
+    color: white;
+    border: none;
+}
+
+.submit-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+}
+
+.cancel-btn {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
 } 
