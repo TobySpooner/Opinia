@@ -20,7 +20,7 @@ const handleLoad = async () => {
 };
 
 const getPosts = async () => {
-  const req = await fetch("http://localhost:8080/posts", {
+  const req = await fetch("http://opinia.onrender.com/posts", {
     method: "GET",
   });
   const res = await req.json();
@@ -87,7 +87,7 @@ const renderPost = (p) => {
 };
 
 const getUserData = async () => {
-  const req = await fetch("http://localhost:8080/me", {
+  const req = await fetch("http://opinia.onrender.com/me", {
     method: "GET",
   });
   const res = await req.json();
