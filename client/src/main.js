@@ -25,15 +25,16 @@ if (signupForm) {
         alert("Signup successful!");
       } else {
         console.error("Signup failed:", result.error);
-      }
+      };
     } catch (err) {
       console.error("Signup error:", err);
-    }
+    };
   });
-}
+};
 
 // Login form handler
 const loginForm = document.querySelector("#loginContainer");
+
 if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -57,6 +58,6 @@ if (loginForm) {
       alert("Login successful!");
     } else {
       alert(data.error);
-    }
+    };
   });
-}
+};
