@@ -1,5 +1,6 @@
 export default {
-    server: {
+  server: {
+      open: true,
       proxy: {
         '/api': 'http://localhost:8080'
       }
