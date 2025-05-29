@@ -11,35 +11,43 @@
     <script type="module" src="./src/main.js" defer></script>
   </head>
   <body>
-    <div id="topbar">
-      <span>
-        <img src="Opinia.png" alt="" />
-        <h2 class="impact">Opinia</h2>
-      </span>
-      <div id="pfp"></div>
-    </div>
+    <header>
+      <div>
+        <img src="./src/assets/media/icons/Opinia.svg" alt="Opinia logo" />
+        <h1 class="gradient-text impact">Opinia</h1>
+      </div>
 
-    <div id="app">
+      <img
+        id="pfp"
+        src="#"
+        alt="Your profile picture"
+      />
+    </header>
+
+    <main>
       <img src="./src/assets/media/images/hero-img.png" alt="Opinia Posts" id="hero-img" />
-      <h1 class="hero-title impact">The modern way to share your opinion</h1>
-      <p class="barlow-sc-regular hero-text">
+      <h1 id="hero-title" class="impact">The modern way to share your opinion</h1>
+      <p id="hero-text" class="barlow-sc-regular">
         Opinia makes it easy to share your opinions on music, movies, games —
         whatever takes your fancy.
       </p>
-      <div class="hero-buttons">
-        <a href="/login.html" class="button barlow-sc-semibold">Login</a>
-        <a href="/signup.html" class="button second barlow-sc-semibold"
-          >Sign Up</a
-        >
+      <div id="hero-buttons">
+        <a href="./src/pages/auth/login.html" class="cta barlow-sc-semibold">Login</a>
+        <a href="./src/pages/auth/signup.html" class="cta barlow-sc-semibold">
+          Sign Up
+        </a>
       </div>
-    </div>
+    </main>
 
     <nav>
-      <div class="menu-bar">
-        <h2 class="impact one">Home</h2>
-        <h2 class="impact two">Account</h2>
-      </div>
-      <img src="./src/assets/media/icons/menu.svg" alt="+" id="menu" />
+      <a class="impact" href="#">Home</a>
+      <a class="impact" href="#">Account</a>
+
+      <img
+        id="menu-btn"
+        src="./src/assets/media/icons/menu.svg"
+        alt="#"
+      />
     </nav>
   </body>
 </html>
