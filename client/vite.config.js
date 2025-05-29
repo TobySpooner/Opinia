@@ -1,8 +1,9 @@
 export default {
   server: {
-      open: true,
-      proxy: {
-        '/api': 'http://localhost:8080'
-      }
+    open: true,
+    port: 3000,
+    proxy: {
+      '/api': 'http://localhost:8080'
     }
   }
+}
