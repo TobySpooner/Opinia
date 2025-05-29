@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/styles/notifications.css">
+    <link rel="stylesheet" href="/src/styles/menu.css">
+    <link rel="stylesheet" href="/src/pages/posts/posts.css">
+    <title>Opinia - Posts</title>
+</head>
+<body>
+    <div id="nav">
+        <img id="navImg" src="/src/assets/media/icons/OpiniaLogoBig.svg">
+        <h2><span class="gradient-text">Opinia</span></h2>
+    </div>
+
+    <div class="main-container">
+        <div class="posts-container">
+            <div class="posts-header">
+                <h1 class="gradient-text">Posts</h1>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">All Posts</button>
+                    <button class="filter-btn" data-filter="popular">Popular</button>
+                    <button class="filter-btn" data-filter="recent">Recent</button>
+                    <button class="filter-btn" data-filter="my">My Posts</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search posts...">
+                </div>
+            </div>
+
+            <div class="posts-grid" id="postsGrid">
+                <!-- Posts will be dynamically inserted here -->
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading posts...</p>
+                </div>
+            </div>
+
+            <button id="createPostBtn" class="create-btn">
+                <span class="plus-icon">+</span>
+                Create Post
+            </button>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div id="createPostModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="gradient-text">Create Post</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="createPostForm">
+                <div class="form-group">
+                    <label for="postTitle">Title</label>
+                    <input type="text" id="postTitle" name="title" 
+                           placeholder="What's your opinion about?" required maxlength="100">
+                    <span class="char-count title-count">0/100</span>
+                </div>
+                <div class="form-group">
+                    <label for="postContent">Content</label>
+                    <textarea id="postContent" name="content" 
+                            placeholder="Share your thoughts..." required maxlength="1000"></textarea>
+                    <span class="char-count content-count">0/1000</span>
+                </div>
+                <div class="form-group">
+                    <label for="tagSearch">Tags</label>
+                    <div class="tag-selector">
+                        <div class="selected-tags"></div>
+                        <input type="text" id="tagSearch" placeholder="Search tags...">
+                        <div class="tag-dropdown"></div>
+                        <input type="hidden" id="postTags" name="tags">
+                    </div>
+                    <small class="help-text">Select up to 5 tags</small>
+                </div>
+                <button type="submit" class="submit-btn">Create Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initMenu } from '/src/utils/menu.js';
+        initMenu();
+    </script>
+    <script type="module" src="posts.js"></script>
+</body>
+</html> 

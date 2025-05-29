@@ -1,0 +1,213 @@
+.navbar {
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem var(--container-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.navbar-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    margin-left: 2rem;
+}
+
+.navbar-start, .navbar-end {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar-item {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.navbar-item:hover {
+    background-color: var(--accent-color);
+}
+
+.navbar-item[aria-current="page"] {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Skip link */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    z-index: 1001;
+    transition: top 0.2s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Controls */
+.navbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.control-button,
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.control-button:hover,
+.theme-toggle:hover {
+    background-color: var(--accent-color);
+}
+
+.control-label {
+    display: none;
+}
+
+.theme-toggle-icon {
+    font-size: 1.25rem;
+}
+
+/* Show/hide theme icons based on current theme */
+.dark-theme .light-icon,
+:root:not(.dark-theme) .dark-icon {
+    display: none;
+}
+
+/* Mobile navigation */
+@media screen and (max-width: 48em) {
+    .navbar-menu {
+        position: fixed;
+        top: 4rem;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--bg-color);
+        padding: 1rem;
+        flex-direction: column;
+        align-items: stretch;
+        display: none;
+        border-bottom: 1px solid var(--border-color);
+        overflow-y: auto;
+    }
+
+    .navbar-menu.is-active {
+        display: flex;
+    }
+
+    .navbar-start, .navbar-end {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .navbar-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .control-group {
+        justify-content: flex-start;
+    }
+
+    .control-button,
+    .theme-toggle {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 0.75rem 1rem;
+    }
+
+    .control-label {
+        display: inline;
+    }
+
+    .navbar-item {
+        padding: 0.75rem 1rem;
+    }
+
+    /* Burger menu button */
+    .navbar-burger {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 3rem;
+        height: 3rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        margin-left: auto;
+    }
+
+    .navbar-burger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background-color: var(--text-color);
+        margin: 4px 0;
+        transition: 0.2s;
+    }
+
+    .navbar-burger[aria-expanded="true"] span:nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    .navbar-burger[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .navbar-burger[aria-expanded="true"] span:nth-child(3) {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+} 

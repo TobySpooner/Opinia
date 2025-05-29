@@ -24,6 +24,7 @@ export function initMenu() {
             if (response.ok) {
                 menuItems = `
                     <li><a href="/index.html">Home</a></li>
+                    <li><a href="/src/pages/posts/posts.html">Posts</a></li>
                     <li><a href="/src/pages/users/users.html">Users</a></li>
                     <li><a href="/src/pages/tags/tags.html">Tags</a></li>
                     <li><a href="/src/pages/account/account.html">Account</a></li>
@@ -31,6 +32,7 @@ export function initMenu() {
             } else {
                 menuItems = `
                     <li><a href="/index.html">Home</a></li>
+                    <li><a href="/src/pages/posts/posts.html">Posts</a></li>
                     <li><a href="/src/pages/auth/login.html">Login</a></li>
                     <li><a href="/src/pages/auth/signup.html">Sign Up</a></li>
                 `;
