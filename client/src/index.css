@@ -11,7 +11,7 @@ body {
   width: 100%;
   min-height: 80vh;
   margin: 0;
-  padding: 0;
+  padding: 0rem 0rem 1rem;
   background-color: var(--background);
   color: var(--text);
   overflow-x: hidden;
@@ -26,6 +26,7 @@ body {
 #hero-img {
   width: 95%;
   height: auto;
+  content: url("/hero-img.png");
 }
 
 .hero-title {
@@ -123,16 +124,55 @@ nav {
   justify-self: center;
 }
 
+#search {
+  display: none;
+}
+
+#searchbar {
+  border-radius: 1000px;
+  width: fit-content;
+  min-width: 25%;
+  background-color: var(--text-l);
+  color: var(--background);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
 @media only screen and (width > 500px) {
   .hero-buttons {
     width: 50%;
   }
-}
-@media only screen and (width > 650px) {
+  nav {
+    display: none;
+  }
+  #search {
+    display: inline;
+  }
   #hero-img {
     width: 70%;
   }
+  #app {
+    padding-top: 1rem;
+  }
+}
+
+@media only screen and (width > 650px) {
+  #hero-img {
+    width: 60%;
+  }
   html {
     font-size: 20px;
+  }
+}
+
+@media only screen and (width >= 1000px) {
+  #hero-img {
+    content: url("/hero-img-wide.png");
+    width: 90%;
+    padding-bottom: 1rem;
+  }
+  .hero-buttons {
+    width: 30%;
   }
 }
