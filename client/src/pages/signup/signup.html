@@ -1,32 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../styles/notifications.css">
-    <link rel="stylesheet" href="signup.css">
-    <title>Opinia - Sign Up</title>
-</head>
-<body>
-    <div class="signup-container">
-        <form id="signupForm" class="signup-form">
-            <h2>Create an Account</h2>
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/png" href="Opinia.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="signup.css">
+        <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700,900&display=swap" rel="stylesheet">
+        <title>Opinia</title>
+    </head>
+    <body>
+        <div id="main"></div>
+        <div id="nav">
+            <img id="navImg" src="OpiniaLogoBig.svg">
+            <h2><span class="gradient-text"><b>Opinia</b></span></h2>
+        </div>
+
+        <div id="signupContainer">
+            <div>
+                <img id="containerImg" src="OpiniaLogoBig.svg">
+                <h2 id="signupTitle">Signup to <span class="gradient-text">Opinia</span></h2>
+                <form>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email">
+
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username">
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password">
+                    
+                    <button type="submit" class="btn">
+                        Signup
+                        <div class="btn2"></div>
+                    </button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Sign Up</button>
-            <p class="login-link">Already have an account? <a href="../login/login.html">Login</a></p>
-        </form>
-    </div>
-    <script type="module" src="signup.js"></script>
-</body>
-</html> 
+
+            <p id="account">Already got an account? <a href="/login.html"><span class="gradient-text">Login</span></a></p>
+        </div>
+        <!-- <h1>SignupPage</h1>
+        <a href="/index.html">HomePage</a>
+        <a href="/login.html">LoginPage</a> -->
+        <script type="module" src="/src/main.js"></script>
+    </body>
+</html>
