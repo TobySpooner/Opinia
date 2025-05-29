@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/src/styles/notifications.css">
+    <link rel="stylesheet" href="/src/styles/menu.css">
+    <link rel="stylesheet" href="/src/styles/global.css">
+    <link rel="stylesheet" href="/src/pages/posts/post.css">
+    <title>Opinia - Post</title>
+</head>
+<body>
+    <div id="nav">
+        <img id="navImg" src="/src/assets/media/icons/OpiniaLogoBig.svg" alt="Opinia Logo">
+        <h2><span class="gradient-text">Opinia</span></h2>
+    </div>
+
+    <div class="main-container">
+        <div id="postContent" class="post-container">
+            <!-- Post content will be loaded here -->
+        </div>
+
+        <div class="comments-section">
+            <h2 class="comments-header">
+                <i class="far fa-comments"></i>
+                Comments
+            </h2>
+            
+            <form id="commentForm" class="comment-form">
+                <div class="comment-input-wrapper">
+                    <textarea 
+                        id="commentInput" 
+                        placeholder="Share your thoughts..." 
+                        maxlength="1000"
+                        required
+                    ></textarea>
+                    <div class="comment-form-footer">
+                        <span class="char-count">0/1000</span>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Post Comment
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="commentsList" class="comments-list">
+                <div class="loading-comments">
+                    <div class="spinner"></div>
+                    <p>Loading comments...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initMenu } from '/src/utils/menu.js';
+        import { themeManager } from '/src/utils/themeManager.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initMenu();
+        });
+    </script>
+    <script type="module" src="post.js"></script>
+</body>
+</html> 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Opinia - Home Page">
+    <title>Home - Opinia</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+
+    <!-- Base styles -->
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="/styles/navbar.css">
+    
+    <!-- Page specific styles -->
+    <link rel="stylesheet" href="/styles/home.css">
+
+    <!-- Theme script -->
+    <script src="/scripts/theme.js" defer></script>
+    <script src="/scripts/navbar.js" defer></script>
+</head>
+<body>
+    <!-- Include the navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Main content -->
+    <main id="main-content" class="container">
+        <h1>Welcome to Opinia</h1>
+        <section class="posts-section">
+            <h2>Recent Posts</h2>
+            <div id="posts-container">
+                <!-- Posts will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Load and inject the navbar
+        fetch('/components/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                if (window.navbarManager) {
+                    window.navbarManager.init();
+                }
+            })
+            .catch(error => console.error('Error loading navbar:', error));
+    </script>
+    
+    <!-- Page specific scripts -->
+    <script src="/scripts/home.js" type="module"></script>
+</body>
+</html> 
