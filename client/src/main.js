@@ -1,5 +1,5 @@
 // Signup form handler
-const signupForm = document.querySelector("#signupForm");
+const signupForm = document.querySelector("#signupContainer");
 if (signupForm) {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
