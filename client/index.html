@@ -3,26 +3,43 @@
 <html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="./src/assets/media/icons/Opinia.png" />
+    <link rel="icon" type="image/png" href="/src/assets/media/icons/Opinia.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Opinia</title>
-    <link rel="stylesheet" href="./src/themes.css" />
-    <link rel="stylesheet" href="./index.css" />
-    <script type="module" src="./src/main.js" defer></script>
+    <link rel="stylesheet" href="/src/themes.css" />
+    <link rel="stylesheet" href="/src/styles/menu.css" />
+    <link rel="stylesheet" href="/index.css" />
+    <style>
+      #nav {
+        background-color: black;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .nav-brand img {
+        height: 2rem;
+      }
+      .nav-brand h2 {
+        margin: 0;
+        color: white;
+      }
+    </style>
+    <script type="module" src="/src/main.js" defer></script>
   </head>
   <body>
-    <header>
-      <div>
-        <img src="./src/assets/media/icons/Opinia.svg" alt="Opinia logo" />
-        <h1 class="gradient-text-h impact">Opinia</h1>
-      </div>
+    <div id="nav">
+      <div class="nav-brand">
+        <img src="/src/assets/media/icons/Opinia.svg" alt="Opinia logo" />
+        <h2 class="gradient-text impact">Opinia</h2>
 
-      <img
-        id="pfp"
-        src="#"
-        alt="Your profile picture"
-      />
-    </header>
+      </div>
+    </div>
 
     <nav>
       <a class="impact" href="#">Home</a>
@@ -32,18 +49,23 @@
     </nav>
 
     <main>
-      <img src="./src/assets/media/images/hero-img.png" alt="Opinia Posts" id="hero-img" />
+      <img src="/src/assets/media/images/hero-img.png" alt="Opinia Posts" id="hero-img" />
       <h1 id="hero-title" class="impact">The modern way to share your opinion</h1>
       <p id="hero-text" class="barlow-sc-regular">
         Opinia makes it easy to share your opinions on music, movies, games —
         whatever takes your fancy.
       </p>
       <div id="hero-buttons">
-        <a href="./src/pages/auth/login.html" class="cta barlow-sc-semibold">Login</a>
-        <a href="./src/pages/auth/signup.html" class="cta barlow-sc-semibold">
+        <a href="/src/pages/auth/login.html" class="cta barlow-sc-semibold">Login</a>
+        <a href="/src/pages/auth/signup.html" class="cta barlow-sc-semibold">
           Sign Up
         </a>
       </div>
     </main>
+    <script type="module">
+      import { initMenu } from '/src/utils/menu.js';
+      initMenu();
+    </script>
+
   </body>
 </html>

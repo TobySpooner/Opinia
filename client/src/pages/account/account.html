@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/styles/notifications.css">
+    <link rel="stylesheet" href="/src/styles/menu.css">
+    <link rel="stylesheet" href="account.css">
+    <title>Opinia - User Profile</title>
+</head>
+<body>
+    <div id="nav">
+        <img id="navImg" src="/src/assets/media/icons/OpiniaLogoBig.svg">
+        <h2><span class="gradient-text">Opinia</span></h2>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="bioInput">Bio</label>
+                    <textarea id="bioInput" name="bio" rows="4" maxlength="200" placeholder="Tell us about yourself..."></textarea>
+                    <small class="char-count">0/200</small>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Save Changes</button>
+                    <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Change Password</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Change Password</button>
+                    <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="account-container" data-is-owner="false">
+            <p class="page-title">User Profile</p>
+            <div class="account-header">
+                <div class="profile-info">
+                    <div class="profile-main">
+                        <div class="profile-picture"><span></span></div>
+                        <div class="profile-details">
+                            <h1 class="username gradient-text"></h1>
+                            <div class="profile-meta">
+                                <div class="role-badge"></div>
+                                <div class="karma-badge">
+                                    <span class="karma-count"></span>
+                                    <span class="karma-label">karma</span>
+                                </div>
+                            </div>
+                            <p class="bio"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="account-content">
+                <div class="content-section posts-section">
+                    <h2 class="section-title gradient-text">Posts</h2>
+                    <div class="posts-container" id="postsContainer">
+                        <!-- Posts will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="content-section comments-section">
+                    <h2 class="section-title gradient-text">Comments</h2>
+                    <div class="comments-container" id="commentsContainer">
+                        <!-- Comments will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="account-actions" style="display: none;">
+                <button class="action-button" id="editProfileBtn">
+                    <h3>✏️ Edit Profile</h3>
+                    <p>Update your bio and personal information</p>
+                </button>
+                <button class="action-button" id="changePasswordBtn">
+                    <h3>🔒 Change Password</h3>
+                    <p>Update your account password</p>
+                </button>
+                <button class="action-button" id="privacySettingsBtn">
+                    <h3>🔐 Privacy Settings</h3>
+                    <p>Manage your account privacy and visibility</p>
+                </button>
+                <button class="action-button delete" id="deleteAccountBtn">
+                    <h3>⚠️ Delete Account</h3>
+                    <p>Permanently delete your account and all data</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initMenu } from '/src/utils/menu.js';
+        initMenu();
+    </script>
+    <script type="module" src="account.js"></script>
+</body>
+</html> 

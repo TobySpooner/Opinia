@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/styles/notifications.css">
+    <link rel="stylesheet" href="/src/styles/menu.css">
+    <link rel="stylesheet" href="tags.css">
+    <title>Opinia - Tags</title>
+</head>
+<body>
+    <div id="nav">
+        <img id="navImg" src="/src/assets/media/icons/OpiniaLogoBig.svg">
+        <h2><span class="gradient-text">Opinia</span></h2>
+    </div>
+
+    <div class="main-container">
+        <div class="tags-container">
+            <div class="tags-header">
+                <p class="tags-title gradient-text">Tags</p>
+                <p class="tags-subtitle">Browse and create tags for your content</p>
+            </div>
+            
+            <div class="tags-content">
+                <div class="tags-existing-container">
+                    <div class="tags-existing-scroll" id="tagslist">
+                    </div>
+                </div>
+
+                <div class="tags-creation-container">
+                    <form id="tagForm" class="tag-form">
+                        <h3 class="form-title gradient-text">Create a Tag</h3>
+                        <div class="form-group">
+                            <label for="tagName">Tag Name</label>
+                            <input type="text" id="tagName" name="tagName" placeholder="Enter tag name" maxlength="20" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tagDescription">Description</label>
+                            <textarea id="tagDescription" name="tagDescription" placeholder="Enter tag description"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Create Tag</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initMenu } from '/src/utils/menu.js';
+        initMenu();
+    </script>
+    <script type="module" src="tags.js"></script>
+</body>
+</html>
