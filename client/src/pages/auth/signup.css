@@ -666,17 +666,17 @@ h2 {
         background: black;
         padding: 0.5rem;
         color: white; 
-        font-size:2.6rem;
+        font-size:2rem;
     }
 
     #signupContainer {
         box-shadow: 3px 8px 20px 0px rgba(0, 0, 0, 0.13);
         position: absolute;
-        top: 56%;
+        top: 55%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 44rem;
-        height: 34rem;
+        width: 36rem;
+        height: 38rem;
         background: white;
         border-radius: 36px;
     }
@@ -777,10 +777,10 @@ h2 {
     }
 
     #signupTitle {
-        font-size:2rem;
-        top: 5.5rem;
+        font-size:3rem;
+        top: 6rem;
         font-weight: 700; 
-        width:16.5rem;
+        width:24.5rem;
         position: absolute;
         left:50%;
         transform: translate(-50%, 0px);
@@ -791,13 +791,13 @@ h2 {
         left:50%;
         transform: translate(-50%, 0px);
         top: 1rem;
-        width:4.5rem;
-        height:4.5rem;
+        width:5rem;
+        height:5rem;
     }
 
     #navImg {
-        width:4rem;
-        height:4rem;
+        width:3rem;
+        height:3rem;
         margin-right:1rem;
     }
 
