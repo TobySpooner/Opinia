@@ -12,6 +12,7 @@ body {
   margin: 0;
   overflow-x: hidden;
   background-color: var(--background);
+  font-family: "Inter", Arial, Helvetica, sans-serif;
 }
 
 
@@ -102,6 +103,14 @@ main {
 .cta:active {
   scale: 0.9;
 }
+.cta:hover {
+  scale: 1.1;
+}
+
+.gradient {
+  background: linear-gradient(90deg, #bb18c3 0%, #1b63a7 100%);
+  color: white;
+}
 
 nav {
   height: 2rem;
@@ -185,6 +194,9 @@ nav a:last-of-type {
 }
 
 @media only screen and (width >= 1000px) {
+  html {
+    font-size: 24px;
+  }
   #hero-img {
     content: url("./src/assets/media/images/hero-img-wide.png");
     width: 90%;
@@ -194,9 +206,13 @@ nav a:last-of-type {
     width: 30%;
   }
   main {
-    margin-top: 5rem;
+    margin-top: 4rem;
+    margin-bottom: 1rem;
   }
   #hero-title {
     font-size: 3rem;
+  }
+  .cta {
+    padding: 0.75rem 3rem;
   }
 }
