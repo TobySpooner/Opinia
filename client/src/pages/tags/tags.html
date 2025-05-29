@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../styles/notifications.css">
+    <link rel="stylesheet" href="/src/styles/notifications.css">
+    <link rel="stylesheet" href="/src/styles/menu.css">
     <link rel="stylesheet" href="tags.css">
     <title>Opinia - Tags</title>
 </head>
 <body>
     <div id="nav">
-        <img id="navImg" src="../../assets/media/icons/OpiniaLogoBig.svg">
+        <img id="navImg" src="/src/assets/media/icons/OpiniaLogoBig.svg">
         <h2><span class="gradient-text">Opinia</span></h2>
     </div>
 
@@ -45,6 +46,10 @@
         </div>
     </div>
 
+    <script type="module">
+        import { initMenu } from '/src/utils/menu.js';
+        initMenu();
+    </script>
     <script type="module" src="tags.js"></script>
 </body>
 </html>
