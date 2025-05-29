@@ -101,7 +101,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 0rem;
-  background-color: var(--text);
+  background-color: black;
   color: var(--background);
 }
 nav a {
@@ -146,9 +146,6 @@ nav a:last-of-type {
 @media only screen and (width > 500px) {
   .hero-buttons {
     width: 50%;
-  }
-  nav {
-    display: none;
   }
   #search {
     display: inline;
