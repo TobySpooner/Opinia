@@ -147,7 +147,7 @@ body .btn2 {
     margin-right:1rem;
 }
 
-.gradient-text {
+.gradient-text-h {
     background: linear-gradient(90deg,#BB18C3 0%, #1B63A7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

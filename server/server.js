@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "http://localhost:3000",
   credentials: true               
 }));
 
@@ -129,3 +129,27 @@ app.post("/logout", (req, res) => {
   });
 });
 
+app.get('/posts', async (req, res) => {
+  try {
+    const q = await db.query('SELECT * FROM posts ORDER BY created_at DESC LIMIT 10');
+
+    const data = [];
+
+    for (const [_, v] of Object.entries(q.rows)) {
+      const user = await db.query(`SELECT * FROM user_with_roles WHERE id = ${v.user_id}`);
+
+      data.push({
+        ...v,
+        user: user.rows[0]
+      });
+    };
+
+    return res.json({
+      ok: true,
+      message: "Fetched posts successfully",
+      data: data
+    }).status(200);
+  } catch (e) {
+    console.log(`Error fetching posts: ${e}`);
+  };
+});
