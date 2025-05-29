@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/notifications.css">
+    <link rel="stylesheet" href="account.css">
+    <title>Opinia - User Profile</title>
+</head>
+<body>
+    <div id="nav">
+        <img id="navImg" src="../../assets/media/icons/OpiniaLogoBig.svg">
+        <h2><span class="gradient-text">Opinia</span></h2>
+    </div>
+
+    <div class="main-container">
+        <div class="account-container" data-is-owner="false">
+            <p class="page-title">User Profile</p>
+            <div class="account-header">
+                <div class="profile-info">
+                    <div class="profile-main">
+                        <div class="profile-picture"><span></span></div>
+                        <div class="profile-details">
+                            <h1 class="username gradient-text"></h1>
+                            <div class="profile-meta">
+                                <div class="role-badge"></div>
+                                <div class="karma-badge">
+                                    <span class="karma-count"></span>
+                                    <span class="karma-label">karma</span>
+                                </div>
+                            </div>
+                            <p class="bio"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="account-content">
+                <div class="content-section posts-section">
+                    <h2 class="section-title gradient-text">Posts</h2>
+                    <div class="posts-container" id="postsContainer">
+                        <!-- Posts will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="content-section comments-section">
+                    <h2 class="section-title gradient-text">Comments</h2>
+                    <div class="comments-container" id="commentsContainer">
+                        <!-- Comments will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="account-actions">
+                <h2 class="actions-title">Account Management</h2>
+                <div class="actions-grid">
+                    <div class="action-card" id="editProfileBtn">
+                        <h3 class="action-title">✏️ Edit Profile</h3>
+                        <p class="action-description">Update your bio and personal information</p>
+                    </div>
+                    <div class="action-card" id="changePasswordBtn">
+                        <h3 class="action-title">🔒 Change Password</h3>
+                        <p class="action-description">Update your account password</p>
+                    </div>
+                    <div class="action-card" id="privacySettingsBtn">
+                        <h3 class="action-title">🔐 Privacy Settings</h3>
+                        <p class="action-description">Manage your account privacy and visibility</p>
+                    </div>
+                    <div class="action-card danger" id="deleteAccountBtn">
+                        <h3 class="action-title">⚠️ Delete Account</h3>
+                        <p class="action-description">Permanently delete your account and all data</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="account.js"></script>
+</body>
+</html> 
