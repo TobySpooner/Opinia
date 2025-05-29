@@ -1,3 +1,5 @@
+import { notify } from './utils/notification.js';
+
 // Signup form handler
 const signupForm = document.querySelector("#signupContainer");
 if (signupForm) {
@@ -8,6 +10,25 @@ if (signupForm) {
     const username = e.target.username.value;
     const password = e.target.password.value;
 
+    // Form validation
+    if (!email || !username || !password) {
+      notify.warning('Please fill in all fields');
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      notify.warning('Please enter a valid email address');
+      return;
+    }
+
+    // Basic password validation
+    if (password.length < 6) {
+      notify.warning('Password must be at least 6 characters long');
+      return;
+    }
+
     try {
       const res = await fetch("http://localhost:8080/signup", {
         method: "POST",
@@ -15,22 +36,23 @@ if (signupForm) {
         body: JSON.stringify({ email, username, password }),
       });
 
-      const text = await res.text();
-      console.log("Raw server response:", text);
-
-      const result = JSON.parse(text);
-      console.log("Signup result:", result);
+      const result = await res.json();
 
       if (res.ok) {
-        alert("Signup successful!");
+        notify.success('Account created successfully');
+        // Redirect after showing the notification
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1500);
       } else {
-        console.error("Signup failed:", result.error);
-      };
+        notify.error(result.error || 'Failed to create account');
+      }
     } catch (err) {
       console.error("Signup error:", err);
-    };
+      notify.error('An unexpected error occurred');
+    }
   });
-};
+}
 
 // Login form handler
 const loginForm = document.querySelector("#loginContainer");
@@ -42,22 +64,35 @@ if (loginForm) {
     const username = e.target.username.value;
     const password = e.target.password.value;
 
-    const res = await fetch("http://localhost:8080/login", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
+    if (!username || !password) {
+      notify.warning('Please fill in all fields');
+      return;
+    }
 
-    const data = await res.json();
-    console.log(data);
+    try {
+      const res = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (res.ok) {
-      alert("Login successful!");
-    } else {
-      alert(data.error);
-    };
+      const data = await res.json();
+
+      if (res.ok) {
+        notify.success('Login successful');
+        // Redirect after showing the notification
+        setTimeout(() => {
+          window.location.href = '../home/home.html';
+        }, 1500);
+      } else {
+        notify.error(data.error || 'Login failed');
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      notify.error('An unexpected error occurred');
+    }
   });
-};
+}
