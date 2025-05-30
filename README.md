@@ -6,7 +6,6 @@
 
 ## Team Members
 
-- [Connor McDonald](https://github.com/OCSYT)
 - [Dylan Bullock](https://github.com/DylanBk)
 - [Jaden Ebbage-Renwick](https://github.com/jser7)
 - [Reuben Dubois](https://github.com/RoobnAccessCreative)
