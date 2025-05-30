@@ -248,13 +248,16 @@ async function loadPosts() {
 // Create new post
 async function createPost(title, content, tagIds) {
   try {
+    // Convert comma-separated string to array of integers if needed
+    const tag_ids = tagIds ? tagIds.split(',').map(id => parseInt(id)).filter(id => !isNaN(id)) : [];
+    
     const response = await fetch(`${API_URL}/posts`, {
       method: "POST",
       ...API_CONFIG,
       body: JSON.stringify({
-        title,
-        content,
-        tag_ids: tagIds
+        post_title: title,
+        post_content: content,
+        tag_ids
       }),
     });
 
@@ -341,18 +344,29 @@ createPostForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const title = titleInput.value.trim();
   const content = contentInput.value.trim();
-  const tags = tagsInput.value.trim();
+  const tags = postTagsInput.value.trim();
 
   console.log("Form submission - title:", title);
   console.log("Form submission - content:", content);
   console.log("Form submission - tags:", tags);
 
   if (!title || !content) {
-    notify.error("Please fill in all required fields");
+    notify.error("Title and content are required");
     return;
   }
 
-  await createPost(title, content, tags);
+  // Disable submit button while processing
+  const submitBtn = createPostForm.querySelector(".submit-btn");
+  if (submitBtn) submitBtn.disabled = true;
+
+  try {
+    await createPost(title, content, tags);
+  } catch (error) {
+    console.error("Error creating post:", error);
+    notify.error(error.message || "Failed to create post");
+  } finally {
+    if (submitBtn) submitBtn.disabled = false;
+  }
 });
 
 // Debounce helper function
@@ -420,6 +434,9 @@ async function initTagSelector() {
 
     // Populate dropdown with available tags
     updateTagDropdown();
+    
+    // Show dropdown by default
+    tagDropdown.classList.add("active");
 
     // Add event listeners
     tagSearch.addEventListener("focus", () => {
@@ -432,7 +449,8 @@ async function initTagSelector() {
     });
 
     document.addEventListener("click", (e) => {
-      if (!e.target.closest(".tag-selector")) {
+      // Only hide dropdown if clicking outside tag selector and not on a tag option
+      if (!e.target.closest(".tag-selector") && !e.target.closest(".tag-option")) {
         tagDropdown.classList.remove("active");
       }
     });

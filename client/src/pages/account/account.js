@@ -16,6 +16,7 @@ const editProfileBtn = document.getElementById("editProfileBtn");
 const changePasswordBtn = document.getElementById("changePasswordBtn");
 const privacySettingsBtn = document.getElementById("privacySettingsBtn");
 const deleteAccountBtn = document.getElementById("deleteAccountBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
 // Get user ID from URL or default to logged-in user
 const urlParams = new URLSearchParams(window.location.search);
@@ -98,6 +99,27 @@ function setupAccountActions(userId) {
   changePasswordBtn.addEventListener("click", () => {
     changePasswordForm.reset();
     openModal(changePasswordModal);
+  });
+
+  // Logout handler
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      const response = await fetch(`${API_URL}/logout`, {
+        method: "POST",
+        ...API_CONFIG
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to logout");
+      }
+
+      notify.success("Logged out successfully");
+      // Redirect to login page
+      window.location.href = "/src/pages/auth/login.html";
+    } catch (error) {
+      console.error("Error logging out:", error);
+      notify.error("Failed to logout");
+    }
   });
 
   // Edit Profile Form Submit
