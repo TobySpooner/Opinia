@@ -22,11 +22,11 @@ Social Media
 
 ## User Stories
 
-- As a user, I want to view other people's posts and be abl to scroll through them.
+- As a user, I want to view other people's posts and be able to scroll through them.
 - As a user, I want to be able to create an account and sign in to it.
 - As a user, I want to be able to create posts.
 - As a user, I want to be able to interact with posts (liking and commenting).
-- As a user, I want to be able to make changes to my account including changing details like my username or even deleting it.
+- As a user, I want to be able to make changes to my account, including changing details like my username or even deleting it.
 - As a user, I want to be able to request a copy of my data.
 
 ## Tech Stack
