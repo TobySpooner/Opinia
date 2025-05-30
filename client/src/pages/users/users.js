@@ -77,7 +77,7 @@ function renderUsers(usersToRender) {
   document.querySelectorAll(".user-card").forEach((card) => {
     card.addEventListener("click", () => {
       const userId = card.dataset.userId;
-      window.location.href = `/src/pages/account/account.html?id=${userId}`;
+      window.location.href = `../account/account.html?id=${userId}`;
     });
   });
 }
@@ -91,7 +91,7 @@ async function loadUsers() {
     });
 
     if (!meResponse.ok) {
-      window.location.href = "/src/pages/auth/login.html";
+      window.location.href = "../auth/login.html";
       return;
     }
 

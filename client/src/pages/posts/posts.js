@@ -195,7 +195,7 @@ function renderPosts(postsToRender) {
     card.addEventListener("click", (e) => {
       if (!e.target.closest(".meta-item.likes")) {
         const postId = card.dataset.postId;
-        window.location.href = `/src/pages/posts/post.html?id=${postId}`;
+        window.location.href = `post.html?id=${postId}`;
       }
     });
   });
@@ -390,14 +390,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     if (!response.ok) {
-      window.location.href = "/src/pages/auth/login.html";
+      window.location.href = "../auth/login.html";
       return;
     }
 
     loadPosts();
   } catch (error) {
     console.error("Error checking authentication:", error);
-    window.location.href = "/src/pages/auth/login.html";
+    window.location.href = "../auth/login.html";
   }
 });
 

@@ -1,103 +1,81 @@
 import { API_URL, API_CONFIG } from '../config.js';
 
 export function initMenu() {
-    // Create and append menu button
-    const menuButton = document.createElement('button');
-    menuButton.className = 'menu-button';
-    menuButton.innerHTML = `
-        <span></span>
-        <span></span>
-        <span></span>
+    const nav = document.getElementById("nav");
+    if (!nav) return;
+
+    // Get the current page path
+    const currentPath = window.location.pathname;
+    const isInPagesDir = currentPath.includes('/pages/');
+    const prefix = isInPagesDir ? '../' : './src/pages/';
+
+    // Create menu button
+    const menuBtn = document.createElement("button");
+    menuBtn.id = "menuBtn";
+    menuBtn.innerHTML = `
+        <div class="menu-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     `;
-    document.querySelector('#nav').appendChild(menuButton);
+    nav.appendChild(menuBtn);
 
-    // Create menu overlay with dynamic content
-    const menuOverlay = document.createElement('div');
-    menuOverlay.className = 'menu-overlay';
+    // Create menu container
+    const menuContainer = document.createElement("div");
+    menuContainer.id = "menuContainer";
+    menuContainer.className = "menu-container";
+    document.body.appendChild(menuContainer);
 
-    // Function to check auth status and update menu items
-    async function updateMenuItems() {
-        try {
-            const response = await fetch(`${API_URL}/me`, {
-                ...API_CONFIG
-            });
-
-            let menuItems;
-            if (response.ok) {
-                menuItems = `
-                    <li><a href="/index.html">Home</a></li>
-                    <li><a href="/src/pages/posts/posts.html">Posts</a></li>
-                    <li><a href="/src/pages/users/users.html">Users</a></li>
-                    <li><a href="/src/pages/tags/tags.html">Tags</a></li>
-                    <li><a href="/src/pages/account/account.html">Account</a></li>
+    // Check if user is logged in
+    fetch(`${API_URL}/me`, API_CONFIG)
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.user) {
+                menuContainer.innerHTML = `
+                    <ul>
+                        <li><a href="${prefix}posts/posts.html">Posts</a></li>
+                        <li><a href="${prefix}users/users.html">Users</a></li>
+                        <li><a href="${prefix}tags/tags.html">Tags</a></li>
+                        <li><a href="${prefix}account/account.html">Account</a></li>
+                    </ul>
                 `;
             } else {
-                menuItems = `
-                    <li><a href="/index.html">Home</a></li>
-                    <li><a href="/src/pages/posts/posts.html">Posts</a></li>
-                    <li><a href="/src/pages/auth/login.html">Login</a></li>
-                    <li><a href="/src/pages/auth/signup.html">Sign Up</a></li>
+                menuContainer.innerHTML = `
+                    <ul>
+                        <li><a href="${prefix}posts/posts.html">Posts</a></li>
+                        <li><a href="${prefix}auth/login.html">Login</a></li>
+                        <li><a href="${prefix}auth/signup.html">Sign Up</a></li>
+                    </ul>
                 `;
             }
-
-            menuOverlay.innerHTML = `
-                <div class="menu-content">
-                    <ul class="menu-items">
-                        ${menuItems}
-                    </ul>
-                </div>
+        })
+        .catch((error) => {
+            console.error("Error checking auth status:", error);
+            menuContainer.innerHTML = `
+                <ul>
+                    <li><a href="${prefix}posts/posts.html">Posts</a></li>
+                    <li><a href="${prefix}auth/login.html">Login</a></li>
+                    <li><a href="${prefix}auth/signup.html">Sign Up</a></li>
+                </ul>
             `;
+        });
 
-            // Set active link based on current page
-            const currentPath = window.location.pathname;
-            const menuLinks = menuOverlay.querySelectorAll('a');
-            menuLinks.forEach(link => {
-                if (link.getAttribute('href').includes(currentPath)) {
-                    link.style.color = '#BB18C3';
-                }
-            });
-
-            // Add click handlers to links
-            menuLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    toggleMenu();
-                });
-            });
-        } catch (error) {
-            console.error('Error checking auth status:', error);
-        }
-    }
-
-    // Initial menu setup
-    document.body.appendChild(menuOverlay);
-    updateMenuItems();
-
-    // Toggle menu
-    function toggleMenu() {
-        menuButton.classList.toggle('active');
-        menuOverlay.classList.toggle('active');
-        document.body.style.overflow = menuOverlay.classList.contains('active') ? 'hidden' : '';
-        
-        // Update menu items when opening
-        if (menuOverlay.classList.contains('active')) {
-            updateMenuItems();
-        }
-    }
-
-    // Event listeners
-    menuButton.addEventListener('click', toggleMenu);
-    
-    // Close menu when clicking outside
-    menuOverlay.addEventListener('click', (e) => {
-        if (e.target === menuOverlay) {
-            toggleMenu();
-        }
+    // Toggle menu on button click
+    menuBtn.addEventListener("click", () => {
+        menuContainer.classList.toggle("active");
+        menuBtn.classList.toggle("active");
     });
 
-    // Close menu when pressing escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
-            toggleMenu();
+    // Close menu when clicking outside
+    document.addEventListener("click", (e) => {
+        if (
+            !menuContainer.contains(e.target) &&
+            !menuBtn.contains(e.target) &&
+            menuContainer.classList.contains("active")
+        ) {
+            menuContainer.classList.remove("active");
+            menuBtn.classList.remove("active");
         }
     });
 } 
