@@ -114,8 +114,8 @@ function setupAccountActions(userId) {
       }
 
       notify.success("Logged out successfully");
-      // Redirect to login page
-      window.location.href = "/src/pages/auth/login.html";
+      // Redirect to login page using relative path
+      window.location.href = "../auth/login.html";
     } catch (error) {
       console.error("Error logging out:", error);
       notify.error("Failed to logout");
@@ -235,7 +235,7 @@ function setupAccountActions(userId) {
 
           notify.success("Account deleted successfully");
           setTimeout(() => {
-            window.location.href = "/index.html";
+            window.location.href = "../../index.html";
           }, 2000);
         } catch (error) {
           console.error("Error deleting account:", error);
@@ -269,7 +269,7 @@ async function loadUserData() {
     });
 
     if (!meResponse.ok) {
-      window.location.href = "/src/pages/auth/login.html";
+      window.location.href = "../auth/login.html";
       return;
     }
 
@@ -280,7 +280,7 @@ async function loadUserData() {
     const userId = targetUserId || loggedInUserId;
 
     if (!userId) {
-      window.location.href = "/src/pages/auth/login.html";
+      window.location.href = "../auth/login.html";
       return;
     }
 

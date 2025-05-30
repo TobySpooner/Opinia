@@ -7,7 +7,7 @@ const postId = parseInt(urlParams.get("id"), 10);
 
 // Validate post ID
 if (!postId || isNaN(postId)) {
-  window.location.href = "/src/pages/posts/posts.html";
+  window.location.href = "posts.html";
 }
 
 // DOM Elements
@@ -65,7 +65,7 @@ async function loadPost() {
                 <div class="error-container">
                     <h2>Post Not Found</h2>
                     <p>The post you're looking for doesn't exist or has been removed.</p>
-                    <a href="/src/pages/posts/posts.html" class="btn">Return to Posts</a>
+                    <a href="posts.html" class="btn">Return to Posts</a>
                 </div>
             `;
       return;
@@ -221,7 +221,7 @@ async function loadPost() {
     console.error("Error loading post:", error);
     notify.error("Failed to load post");
     setTimeout(() => {
-      window.location.href = "/src/pages/posts/posts.html";
+      window.location.href = "posts.html";
     }, 2000);
   }
 }
@@ -400,14 +400,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     if (!response.ok) {
-      window.location.href = "/src/pages/auth/login.html";
+      window.location.href = "../auth/login.html";
       return;
     }
 
     loadPost();
   } catch (error) {
     console.error("Error checking authentication:", error);
-    window.location.href = "/src/pages/auth/login.html";
+    window.location.href = "../auth/login.html";
   }
 });
 
