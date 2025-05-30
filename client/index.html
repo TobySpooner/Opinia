@@ -20,6 +20,11 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
       }
       .nav-brand {
         display: flex;
@@ -33,17 +38,19 @@
         margin: 0;
         color: white;
       }
+      main {
+        margin-top: 5rem;
+      }
     </style>
     <script type="module" src="/src/main.js" defer></script>
   </head>
   <body>
-    <header>
-      <div>
+    <nav id="nav">
+      <div class="nav-brand">
         <img src="./src/assets/media/icons/Opinia.svg" alt="Opinia logo" />
-        <h1 class="gradient-text-h"><b>Opinia</b></h1>
+        <h2>Opinia</h2>
       </div>
-      <img id="pfp" src="#" alt="Your profile picture" />
-    </header>
+    </nav>
 
     <main>
       <img
@@ -68,12 +75,6 @@
       </div>
     </main>
 
-    <nav>
-      <a class="impact" href="#">Home</a>
-      <a class="impact" href="#">Account</a>
-
-      <img id="menu-btn" src="./src/assets/media/icons/menu.svg" alt="#" />
-    </nav>
     <script type="module">
       import { initMenu } from "/src/utils/menu.js";
       initMenu();
