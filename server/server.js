@@ -676,6 +676,307 @@ app.post('/posts', async (req, res) => {
   }
 });
 
+// Get a single post by ID
+app.get('/posts/:id', async (req, res) => {
+  try {
+    const postId = parseInt(req.params.id);
+    
+    if (isNaN(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
+    const query = `
+      SELECT 
+        p.post_id,
+        p.post_title,
+        p.post_content,
+        p.created_at,
+        p.post_likes,
+        u.username,
+        u.profile_pic,
+        ARRAY_AGG(t.tag_name) as tags,
+        COUNT(DISTINCT c.id) as comment_count,
+        EXISTS (
+          SELECT 1 FROM post_likes pl 
+          WHERE pl.post_id = p.post_id 
+          AND pl.user_id = $2
+        ) as liked
+      FROM posts p
+      LEFT JOIN accounts u ON p.user_id = u.id
+      LEFT JOIN post_tags pt ON p.post_id = pt.post_id
+      LEFT JOIN tags t ON pt.tag_id = t.id
+      LEFT JOIN comments c ON p.post_id = c.post_id
+      WHERE p.post_id = $1
+      GROUP BY p.post_id, p.post_title, p.post_content, p.created_at, p.post_likes, u.username, u.profile_pic
+    `;
+
+    const result = await db.query(query, [postId, req.session.user?.id || null]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    const post = {
+      post_id: result.rows[0].post_id,
+      post_title: result.rows[0].post_title,
+      post_content: result.rows[0].post_content,
+      created_at: result.rows[0].created_at,
+      post_likes: result.rows[0].post_likes || 0,
+      comment_count: parseInt(result.rows[0].comment_count) || 0,
+      username: result.rows[0].username,
+      profile_pic: result.rows[0].profile_pic,
+      tags: result.rows[0].tags.filter(tag => tag !== null),
+      liked: result.rows[0].liked || false
+    };
+
+    res.json(post);
+  } catch (err) {
+    console.error('Error fetching post:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// Get comments for a post
+app.get('/posts/:id/comments', async (req, res) => {
+  try {
+    const postId = parseInt(req.params.id);
+    
+    if (isNaN(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
+    const query = `
+      SELECT 
+        c.id,
+        c.content,
+        c.created_at,
+        c.like_count,
+        u.username,
+        u.profile_pic,
+        CASE WHEN cl.user_id = $1 THEN true ELSE false END as liked
+      FROM comments c
+      LEFT JOIN accounts u ON c.user_id = u.id
+      LEFT JOIN comment_likes cl ON c.id = cl.comment_id AND cl.user_id = $1
+      WHERE c.post_id = $2
+      ORDER BY c.created_at DESC
+    `;
+
+    const result = await db.query(query, [req.session.user?.id || null, postId]);
+    
+    const comments = result.rows.map(comment => ({
+      id: comment.id,
+      content: comment.content,
+      created_at: comment.created_at,
+      likes: comment.like_count || 0,
+      username: comment.username,
+      profile_pic: comment.profile_pic,
+      liked: comment.liked
+    }));
+
+    res.json(comments);
+  } catch (err) {
+    console.error('Error fetching comments:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// Add a comment to a post
+app.post('/posts/:id/comments', async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Must be logged in to comment" });
+  }
+
+  try {
+    const postId = parseInt(req.params.id);
+    const { content } = req.body;
+    
+    if (isNaN(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
+    if (!content) {
+      return res.status(400).json({ error: 'Comment content is required' });
+    }
+
+    // First check if post exists
+    const postExists = await db.query(
+      "SELECT post_id FROM posts WHERE post_id = $1",
+      [postId]
+    );
+
+    if (postExists.rows.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // Create the comment
+    const result = await db.query(
+      `INSERT INTO comments (content, post_id, user_id, created_at)
+       VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+       RETURNING id, content, created_at`,
+      [content, postId, req.session.user.id]
+    );
+
+    // Get the complete comment data with username
+    const commentQuery = `
+      SELECT 
+        c.id,
+        c.content,
+        c.created_at,
+        c.like_count,
+        u.username,
+        u.profile_pic
+      FROM comments c
+      LEFT JOIN accounts u ON c.user_id = u.id
+      WHERE c.id = $1
+    `;
+
+    const commentResult = await db.query(commentQuery, [result.rows[0].id]);
+    
+    const comment = {
+      id: commentResult.rows[0].id,
+      content: commentResult.rows[0].content,
+      created_at: commentResult.rows[0].created_at,
+      likes: commentResult.rows[0].like_count || 0,
+      username: commentResult.rows[0].username,
+      profile_pic: commentResult.rows[0].profile_pic,
+      liked: false
+    };
+
+    res.status(201).json(comment);
+  } catch (err) {
+    console.error('Error creating comment:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// Like/unlike a post
+app.post('/posts/:id/like', async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Must be logged in to like posts" });
+  }
+
+  try {
+    const postId = parseInt(req.params.id);
+    
+    if (isNaN(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
+    // Check if user has already liked the post
+    const likeExists = await db.query(
+      `SELECT * FROM post_likes 
+       WHERE post_id = $1 AND user_id = $2`,
+      [postId, req.session.user.id]
+    );
+
+    if (likeExists.rows.length > 0) {
+      // Unlike
+      await db.query(
+        `DELETE FROM post_likes 
+         WHERE post_id = $1 AND user_id = $2`,
+        [postId, req.session.user.id]
+      );
+      await db.query(
+        `UPDATE posts 
+         SET post_likes = post_likes - 1
+         WHERE post_id = $1`,
+        [postId]
+      );
+    } else {
+      // Like
+      await db.query(
+        `INSERT INTO post_likes (post_id, user_id)
+         VALUES ($1, $2)`,
+        [postId, req.session.user.id]
+      );
+      await db.query(
+        `UPDATE posts 
+         SET post_likes = post_likes + 1
+         WHERE post_id = $1`,
+        [postId]
+      );
+    }
+
+    // Get updated like count
+    const result = await db.query(
+      `SELECT post_likes FROM posts WHERE post_id = $1`,
+      [postId]
+    );
+
+    res.json({ 
+      likes: result.rows[0].post_likes,
+      liked: !likeExists.rows.length
+    });
+  } catch (err) {
+    console.error('Error toggling post like:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// Like/unlike a comment
+app.post('/comments/:id/like', async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Must be logged in to like comments" });
+  }
+
+  try {
+    const commentId = parseInt(req.params.id);
+    
+    if (isNaN(commentId)) {
+      return res.status(400).json({ error: 'Invalid comment ID' });
+    }
+
+    // Check if user has already liked the comment
+    const likeExists = await db.query(
+      `SELECT * FROM comment_likes 
+       WHERE comment_id = $1 AND user_id = $2`,
+      [commentId, req.session.user.id]
+    );
+
+    if (likeExists.rows.length > 0) {
+      // Unlike
+      await db.query(
+        `DELETE FROM comment_likes 
+         WHERE comment_id = $1 AND user_id = $2`,
+        [commentId, req.session.user.id]
+      );
+      await db.query(
+        `UPDATE comments 
+         SET like_count = like_count - 1
+         WHERE id = $1`,
+        [commentId]
+      );
+    } else {
+      // Like
+      await db.query(
+        `INSERT INTO comment_likes (comment_id, user_id)
+         VALUES ($1, $2)`,
+        [commentId, req.session.user.id]
+      );
+      await db.query(
+        `UPDATE comments 
+         SET like_count = like_count + 1
+         WHERE id = $1`,
+        [commentId]
+      );
+    }
+
+    // Get updated like count
+    const result = await db.query(
+      `SELECT like_count FROM comments WHERE id = $1`,
+      [commentId]
+    );
+
+    res.json({ 
+      likes: result.rows[0].like_count,
+      liked: !likeExists.rows.length
+    });
+  } catch (err) {
+    console.error('Error toggling comment like:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
 // Handle 404s by sending JSON instead of HTML
 app.use((req, res) => {
   res.status(404).json({ error: "Not Found" });

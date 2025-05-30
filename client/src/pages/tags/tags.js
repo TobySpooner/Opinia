@@ -1,4 +1,5 @@
 import { notify } from "../../utils/notification.js";
+import { API_URL, API_CONFIG } from "../../config.js";
 
 // DOM Elements
 const tagForm = document.getElementById("tagForm");
@@ -6,14 +7,12 @@ const tagsList = document.getElementById("tagslist");
 const tagNameInput = document.getElementById("tagName");
 const tagDescriptionInput = document.getElementById("tagDescription");
 
-const API_URL = "http://opinia-1z72.onrender.com";
-
 // Check if user is admin
 async function checkIsAdmin() {
   try {
     // First check if user is logged in
     const response = await fetch(`${API_URL}/me`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!response.ok) {
@@ -31,7 +30,7 @@ async function checkIsAdmin() {
     const roleResponse = await fetch(
       `${API_URL}/users/${userData.user.id}/role`,
       {
-        credentials: "include",
+        ...API_CONFIG
       }
     );
 
@@ -59,7 +58,7 @@ async function loadTags() {
     tagsList.innerHTML = "";
 
     const response = await fetch(`${API_URL}/tags?includePending=true`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!response.ok) {
@@ -183,10 +182,7 @@ tagForm.addEventListener("submit", async (e) => {
   try {
     const response = await fetch(`${API_URL}/tags`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
+      ...API_CONFIG,
       body: JSON.stringify({
         tag_name: tagName,
         description: description,
@@ -213,10 +209,7 @@ window.approveTag = async function (tagId) {
   try {
     const response = await fetch(`${API_URL}/tags/${tagId}/status`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
+      ...API_CONFIG,
       body: JSON.stringify({ status: "approved" }),
     });
 
@@ -237,10 +230,7 @@ window.rejectTag = async function (tagId) {
   try {
     const response = await fetch(`${API_URL}/tags/${tagId}/status`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
+      ...API_CONFIG,
       body: JSON.stringify({ status: "rejected" }),
     });
 
@@ -268,8 +258,7 @@ window.deleteTag = async function (tagId) {
 
   try {
     const response = await fetch(`${API_URL}/tags/${tagId}`, {
-      method: "DELETE",
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!response.ok) {

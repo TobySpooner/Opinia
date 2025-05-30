@@ -1,4 +1,5 @@
 import { notify } from "./utils/notification.js";
+import { API_URL, API_CONFIG } from "./config.js";
 
 // Signup form handler
 const signupForm = document.querySelector("#signupContainer");
@@ -30,9 +31,9 @@ if (signupForm) {
     }
 
     try {
-      const res = await fetch("http://opinia.onrender.com/signup", {
+      const res = await fetch(`${API_URL}/signup`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        ...API_CONFIG,
         body: JSON.stringify({ email, username, password }),
       });
 
@@ -70,12 +71,9 @@ if (loginForm) {
     }
 
     try {
-      const res = await fetch("http://opinia.onrender.com/login", {
+      const res = await fetch(`${API_URL}/login`, {
         method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        ...API_CONFIG,
         body: JSON.stringify({ username, password }),
       });
 

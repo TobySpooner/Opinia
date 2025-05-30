@@ -1,6 +1,5 @@
 import { notify } from "../../utils/notification.js";
-
-const API_URL = "http://opinia-1z72.onrender.com";
+import { API_URL, API_CONFIG } from "../../config.js";
 
 // DOM Elements
 const postsGrid = document.getElementById("postsGrid");
@@ -174,7 +173,7 @@ function renderPosts(postsToRender) {
         try {
           const response = await fetch(`${API_URL}/posts/${postId}/like`, {
             method: "POST",
-            credentials: "include",
+            ...API_CONFIG
           });
 
           if (!response.ok) throw new Error("Failed to like post");
@@ -212,7 +211,7 @@ async function loadPosts() {
             </div>`;
 
     const response = await fetch(`${API_URL}/posts`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!response.ok) {
@@ -249,33 +248,14 @@ async function loadPosts() {
 // Create new post
 async function createPost(title, content, tagIds) {
   try {
-    // Convert tagIds string to array of integers
-    console.log("Raw tagIds:", tagIds);
-    const tagIdList = tagIds
-      .split(",")
-      .filter((id) => id)
-      .map((id) => parseInt(id));
-    console.log("Processed tagIdList:", tagIdList);
-
-    if (tagIdList.length === 0) {
-      notify.error("Please add at least one tag");
-      return;
-    }
-
-    const requestBody = {
-      post_title: title,
-      post_content: content,
-      tag_ids: tagIdList,
-    };
-    console.log("Request body:", requestBody);
-
     const response = await fetch(`${API_URL}/posts`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(requestBody),
+      ...API_CONFIG,
+      body: JSON.stringify({
+        title,
+        content,
+        tag_ids: tagIds
+      }),
     });
 
     if (!response.ok) {
@@ -392,7 +372,7 @@ function debounce(func, wait) {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await fetch(`${API_URL}/me`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!response.ok) {
@@ -417,7 +397,7 @@ async function initTagSelector() {
 
     // Fetch available tags from the server
     const response = await fetch(`${API_URL}/tags`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!response.ok) {

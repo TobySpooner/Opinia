@@ -1,6 +1,5 @@
 import { notify } from "../../utils/notification.js";
-
-const API_URL = "http://opinia-1z72.onrender.com";
+import { API_URL, API_CONFIG } from "../../config.js";
 
 // DOM Elements
 const usersGrid = document.getElementById("usersGrid");
@@ -88,7 +87,7 @@ async function loadUsers() {
   try {
     // First check if we're logged in
     const meResponse = await fetch(`${API_URL}/me`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!meResponse.ok) {
@@ -97,8 +96,8 @@ async function loadUsers() {
     }
 
     const [usersResponse, rolesResponse] = await Promise.all([
-      fetch(`${API_URL}/users`, { credentials: "include" }),
-      fetch(`${API_URL}/roles/all`, { credentials: "include" }),
+      fetch(`${API_URL}/users`, { ...API_CONFIG }),
+      fetch(`${API_URL}/roles/all`, { ...API_CONFIG }),
     ]);
 
     if (!usersResponse.ok || !rolesResponse.ok) {
