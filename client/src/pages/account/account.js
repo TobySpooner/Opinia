@@ -1,6 +1,5 @@
 import { notify } from "../../utils/notification.js";
-
-const API_URL = "http://opinia-1z72.onrender.com";
+import { API_URL, API_CONFIG } from "../../config.js";
 
 // DOM Elements
 const accountContainer = document.querySelector(".account-container");
@@ -109,10 +108,7 @@ function setupAccountActions(userId) {
     try {
       const response = await fetch(`${API_URL}/users/${userId}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+        ...API_CONFIG,
         body: JSON.stringify({ bio: newBio }),
       });
 
@@ -147,10 +143,7 @@ function setupAccountActions(userId) {
         `${API_URL}/users/${userId}/change-password`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
+          ...API_CONFIG,
           body: JSON.stringify({ currentPassword, newPassword }),
         }
       );
@@ -211,7 +204,7 @@ function setupAccountActions(userId) {
         try {
           const response = await fetch(`${API_URL}/users/${userId}`, {
             method: "DELETE",
-            credentials: "include",
+            ...API_CONFIG,
           });
 
           if (!response.ok) {
@@ -250,7 +243,7 @@ async function loadUserData() {
   try {
     // First check if we're logged in
     const meResponse = await fetch(`${API_URL}/me`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!meResponse.ok) {
@@ -271,7 +264,7 @@ async function loadUserData() {
 
     // Load user details
     const userResponse = await fetch(`${API_URL}/users/${userId}`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!userResponse.ok) {
@@ -282,7 +275,7 @@ async function loadUserData() {
 
     // Load user role
     const roleResponse = await fetch(`${API_URL}/users/${userId}/role`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!roleResponse.ok) {
@@ -321,7 +314,7 @@ async function loadUserData() {
 async function loadUserPosts(userId) {
   try {
     const response = await fetch(`${API_URL}/users/${userId}/posts`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (response.status === 404) {
@@ -378,7 +371,7 @@ async function loadUserPosts(userId) {
 async function loadUserComments(userId) {
   try {
     const response = await fetch(`${API_URL}/users/${userId}/comments`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (response.status === 404) {

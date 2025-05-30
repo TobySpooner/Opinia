@@ -1,3 +1,5 @@
+import { API_URL, API_CONFIG } from '../config.js';
+
 export function initMenu() {
     // Create and append menu button
     const menuButton = document.createElement('button');
@@ -16,8 +18,8 @@ export function initMenu() {
     // Function to check auth status and update menu items
     async function updateMenuItems() {
         try {
-            const response = await fetch('http://localhost:8080/me', {
-                credentials: 'include'
+            const response = await fetch(`${API_URL}/me`, {
+                ...API_CONFIG
             });
 
             let menuItems;

@@ -1,6 +1,5 @@
 import { notify } from "../../utils/notification.js";
-
-const API_URL = "http://opinia-1z72.onrender.com";
+import { API_URL, API_CONFIG } from "../../config.js";
 
 // Get post ID from URL and make it accessible to all functions
 const urlParams = new URLSearchParams(window.location.search);
@@ -55,7 +54,7 @@ async function loadPost() {
   try {
     console.log("Fetching post:", postId);
     const response = await fetch(`${API_URL}/posts/${postId}`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     console.log("Response status:", response.status);
@@ -175,7 +174,7 @@ async function loadPost() {
             `${API_URL}/posts/${post.post_id}/like`,
             {
               method: "POST",
-              credentials: "include",
+              ...API_CONFIG
             }
           );
 
@@ -241,7 +240,7 @@ async function loadComments() {
         `;
 
     const response = await fetch(`${API_URL}/posts/${postId}/comments`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!response.ok) throw new Error("Failed to load comments");
@@ -311,7 +310,7 @@ async function loadComments() {
             `${API_URL}/comments/${commentId}/like`,
             {
               method: "POST",
-              credentials: "include",
+              ...API_CONFIG
             }
           );
 
@@ -365,7 +364,7 @@ if (commentForm && commentInput) {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
+        ...API_CONFIG,
         body: JSON.stringify({ content: commentInput.value.trim() }),
       });
 
@@ -397,7 +396,7 @@ if (commentForm && commentInput) {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await fetch(`${API_URL}/me`, {
-      credentials: "include",
+      ...API_CONFIG
     });
 
     if (!response.ok) {
@@ -411,3 +410,68 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.location.href = "/src/pages/auth/login.html";
   }
 });
+
+// Add comment
+async function addComment(content) {
+  try {
+    const response = await fetch(`${API_URL}/posts/${postId}/comments`, {
+      method: "POST",
+      ...API_CONFIG,
+      body: JSON.stringify({ content }),
+    });
+
+    if (!response.ok) throw new Error("Failed to add comment");
+
+    notify.success("Comment added successfully");
+    return true;
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    notify.error("Failed to add comment");
+    return false;
+  }
+}
+
+// Delete comment
+async function deleteComment(commentId) {
+  try {
+    const response = await fetch(
+      `${API_URL}/posts/${postId}/comments/${commentId}`,
+      {
+        method: "DELETE",
+        ...API_CONFIG
+      }
+    );
+
+    if (!response.ok) throw new Error("Failed to delete comment");
+
+    notify.success("Comment deleted successfully");
+    return true;
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    notify.error("Failed to delete comment");
+    return false;
+  }
+}
+
+// Edit comment
+async function editComment(commentId, content) {
+  try {
+    const response = await fetch(
+      `${API_URL}/posts/${postId}/comments/${commentId}`,
+      {
+        method: "PUT",
+        ...API_CONFIG,
+        body: JSON.stringify({ content }),
+      }
+    );
+
+    if (!response.ok) throw new Error("Failed to edit comment");
+
+    notify.success("Comment edited successfully");
+    return true;
+  } catch (error) {
+    console.error("Error editing comment:", error);
+    notify.error("Failed to edit comment");
+    return false;
+  }
+}
