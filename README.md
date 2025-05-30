@@ -91,7 +91,7 @@ As a user, I want to be able to request a copy of my data.
 
 Design and Planning:
 
-- Wireframes and HiFi diagrams were successfully made
+- Wireframes and HiFi diagrams were successfully made.
 
 Front-End:
 
