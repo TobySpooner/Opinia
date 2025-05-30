@@ -91,7 +91,7 @@ Social Media
 
 Design and Planning:
 
-- Wireframes and HiFi diagrams were successfully made
+- Wireframes and HiFi diagrams were successfully made.
 
 Front-End:
 
