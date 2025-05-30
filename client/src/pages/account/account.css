@@ -154,154 +154,16 @@ body {
     overflow: hidden;
     color: white;
     z-index: 1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .role-badge::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        45deg,
-        var(--gradient-start),
-        var(--gradient-end)
-    );
     z-index: -2;
-    animation: gradientMove 3s ease infinite;
     background-size: 200% 200%;
-}
-
-.role-badge.developer {
-    --gradient-start: #FF4D4D;
-    --gradient-mid: #FFD700;
-    --gradient-end: #00FF00;
-    background: linear-gradient(
-        90deg,
-        var(--gradient-start),
-        var(--gradient-mid),
-        var(--gradient-end)
-    );
-    background-size: 200% 200%;
-    animation: developerGradient 6s ease infinite;
-}
-
-@keyframes developerGradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-.role-badge.administrator {
-    --gradient-start: #FF0000;  /* Bright red */
-    --gradient-mid: #800000;    /* Dark red */
-    --gradient-end: #000000;    /* Black */
-    color: white;               /* Ensure text is white for readability */
-    background: linear-gradient(
-        90deg,
-        var(--gradient-start),
-        var(--gradient-mid),
-        var(--gradient-end)
-    );
-    background-size: 200% 200%;
-    animation: adminGradient 8s ease infinite;
-    position: relative;
-    overflow: hidden !important;
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Add text shadow for better readability */
-}
-
-.role-badge.administrator::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: inherit;
-    filter: blur(8px);
-    opacity: 0.5;
-    z-index: -1;
-    animation: adminGlow 3s ease-in-out infinite alternate;
-}
-
-.role-badge.administrator::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 0, 0, 0.3),
-        transparent
-    );
-    transform: translateX(-100%);
-    animation: adminShimmer 3s infinite;
-    z-index: 1;
-}
-
-@keyframes adminGradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    25% {
-        background-position: 100% 50%;
-    }
-    50% {
-        background-position: 50% 100%;
-    }
-    75% {
-        background-position: 0% 50%;
-    }
-    100% {
-        background-position: 50% 0%;
-    }
-}
-
-@keyframes adminGlow {
-    0% {
-        filter: blur(8px) brightness(1);
-        opacity: 0.5;
-    }
-    50% {
-        filter: blur(12px) brightness(1.2);
-        opacity: 0.7;
-    }
-    100% {
-        filter: blur(8px) brightness(1);
-        opacity: 0.5;
-    }
-}
-
-@keyframes adminShimmer {
-    0% {
-        transform: translateX(-100%);
-    }
-    100% {
-        transform: translateX(100%);
-    }
-}
-
-.role-badge.user {
-    --gradient-start: #4F94CD;
-    --gradient-end: #1B63A7;
-}
-
-.role-badge.moderator {
-    --gradient-start: #32CD32;
-    --gradient-end: #228B22;
-}
-
-@keyframes gradientMove {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+    animation: gradientFlow 8s ease infinite;
 }
 
 .role-badge::after {
@@ -317,6 +179,176 @@ body {
     transform: translateX(-100%);
     animation: shimmer 3s infinite;
     z-index: -1;
+}
+
+/* Owner - Highest Rank */
+.role-badge.owner {
+    --gradient-start: #7B1FA2;
+    --gradient-mid: #9C27B0;
+    --gradient-end: #4A148C;
+    letter-spacing: 0.1em;
+    box-shadow: 0 0 15px rgba(123, 31, 162, 0.4);
+}
+
+.role-badge.owner::before {
+    background: linear-gradient(
+        45deg,
+        var(--gradient-start),
+        var(--gradient-mid),
+        var(--gradient-end)
+    );
+    animation: ownerGradient 6s ease infinite;
+}
+
+.role-badge.owner::after {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    animation: ownerShimmer 2s infinite;
+}
+
+/* Administrator */
+.role-badge.administrator {
+    --gradient-start: #D32F2F;
+    --gradient-mid: #F44336;
+    --gradient-end: #B71C1C;
+    letter-spacing: 0.05em;
+    box-shadow: 0 0 12px rgba(244, 67, 54, 0.3);
+}
+
+.role-badge.administrator::before {
+    background: linear-gradient(
+        45deg,
+        var(--gradient-start),
+        var(--gradient-mid),
+        var(--gradient-end)
+    );
+    animation: gradientFlow 7s ease infinite;
+}
+
+/* VIP */
+.role-badge.vip {
+    --gradient-start: #FFA000;
+    --gradient-mid: #FFB300;
+    --gradient-end: #FF6F00;
+    letter-spacing: 0.05em;
+}
+
+.role-badge.vip::before {
+    background: linear-gradient(
+        45deg,
+        var(--gradient-start),
+        var(--gradient-mid),
+        var(--gradient-end)
+    );
+    animation: gradientFlow 8s ease infinite;
+}
+
+/* Moderator */
+.role-badge.moderator {
+    --gradient-start: #2E7D32;
+    --gradient-mid: #388E3C;
+    --gradient-end: #1B5E20;
+}
+
+.role-badge.moderator::before {
+    background: linear-gradient(
+        45deg,
+        var(--gradient-start),
+        var(--gradient-mid),
+        var(--gradient-end)
+    );
+    animation: gradientFlow 8s ease infinite;
+}
+
+/* Developer */
+.role-badge.developer {
+    --gradient-start: #1565C0;
+    --gradient-mid: #1976D2;
+    --gradient-end: #0D47A1;
+}
+
+.role-badge.developer::before {
+    background: linear-gradient(
+        45deg,
+        var(--gradient-start),
+        var(--gradient-mid),
+        var(--gradient-end)
+    );
+    animation: gradientFlow 8s ease infinite;
+}
+
+/* Regular User */
+.role-badge.user {
+    --gradient-start: #616161;
+    --gradient-mid: #757575;
+    --gradient-end: #424242;
+}
+
+.role-badge.user::before {
+    background: linear-gradient(
+        45deg,
+        var(--gradient-start),
+        var(--gradient-mid),
+        var(--gradient-end)
+    );
+    animation: gradientFlow 10s ease infinite;
+}
+
+@keyframes gradientFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes ownerGradient {
+    0% {
+        background-position: 0% 50%;
+        filter: brightness(1);
+    }
+    25% {
+        background-position: 100% 50%;
+        filter: brightness(1.2);
+    }
+    50% {
+        background-position: 50% 100%;
+        filter: brightness(1);
+    }
+    75% {
+        background-position: 0% 50%;
+        filter: brightness(1.2);
+    }
+    100% {
+        background-position: 50% 0%;
+        filter: brightness(1);
+    }
+}
+
+@keyframes ownerShimmer {
+    0% {
+        transform: translateX(-100%) skewX(-15deg);
+    }
+    100% {
+        transform: translateX(100%) skewX(-15deg);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 .username {

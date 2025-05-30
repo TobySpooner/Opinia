@@ -49,6 +49,26 @@ function formatRelativeTime(dateString) {
   return `${years}y ago`;
 }
 
+// Function to get role name and class from role ID
+function getRoleInfo(roleId) {
+  switch (roleId) {
+    case 1:
+      return { name: 'User', class: 'user' };
+    case 2:
+      return { name: 'Administrator', class: 'administrator' };
+    case 3:
+      return { name: 'Developer', class: 'developer' };
+    case 4:
+      return { name: 'VIP', class: 'vip' };
+    case 5:
+      return { name: 'Moderator', class: 'moderator' };
+    case 6:
+      return { name: 'Owner', class: 'owner' };
+    default:
+      return { name: 'User', class: 'user' };
+  }
+}
+
 // Load post and comments
 async function loadPost() {
   try {
@@ -80,6 +100,8 @@ async function loadPost() {
     console.log("Received post:", post);
     document.title = `Opinia - ${post.post_title}`;
 
+    const roleInfo = getRoleInfo(post.role_id);
+
     postContent.innerHTML = `
             <div class="post-container">
                 <div class="post-header">
@@ -101,15 +123,18 @@ async function loadPost() {
                             <div class="author-name">${
                               post.username || "Anonymous"
                             }</div>
-                            <div class="post-metadata">
-                                <span class="post-timestamp">${formatRelativeTime(
-                                  post.created_at
-                                )}</span>
-                                ${
-                                  post.edited
-                                    ? '<span class="post-edited">(edited)</span>'
-                                    : ""
-                                }
+                            <div class="author-meta">
+                                <div class="role-badge ${roleInfo.class}">${roleInfo.name}</div>
+                                <div class="post-metadata">
+                                    <span class="post-timestamp">${formatRelativeTime(
+                                      post.created_at
+                                    )}</span>
+                                    ${
+                                      post.edited
+                                        ? '<span class="post-edited">(edited)</span>'
+                                        : ""
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
