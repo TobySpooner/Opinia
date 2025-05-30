@@ -15,7 +15,27 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// Basic middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// URL validation middleware - must come before route handlers
+app.use((req, res, next) => {
+  // Check if the URL is a full URL (contains protocol)
+  if (req.url.match(/^https?:\/\//)) {
+    console.error('Rejected full URL:', req.url);
+    return res.status(400).json({ error: 'Full URLs are not allowed' });
+  }
+  next();
+});
+
+// Path normalization middleware
+app.use((req, res, next) => {
+  // Remove query strings and normalize slashes
+  req.url = req.url.split('?')[0].replace(/\/+/g, '/');
+  next();
+});
 
 // Development CORS configuration
 app.use(cors({          
@@ -38,16 +58,82 @@ app.use(
   })
 );
 
-// Serve static files from the client directory
+// Serve static files - keep this AFTER security middleware but BEFORE route handlers
 app.use(express.static(path.join(__dirname, '../client')));
+
+// URL normalization middleware
+app.use((req, res, next) => {
+  try {
+    // Log incoming request
+    console.log('Request URL:', req.url);
+    
+    // Clean the URL
+    req.cleanUrl = req.url.split('?')[0];
+    
+    // Proceed to next middleware
+    next();
+  } catch (error) {
+    console.error('Error in URL normalization middleware:', error);
+    res.status(400).json({ error: 'Invalid URL format' });
+  }
+});
 
 // Database configuration
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+// Initialize default tags
+const DEFAULT_TAGS = [
+  { name: 'Music', description: 'Posts about music, artists, and songs' },
+  { name: 'Food', description: 'Culinary experiences and recipes' },
+  { name: 'Cinema', description: 'Movies, film reviews, and cinema discussion' },
+  { name: 'Technology', description: 'Tech news, gadgets, and innovations' },
+  { name: 'Gaming', description: 'Video games and gaming culture' },
+  { name: 'Sports', description: 'Sports news and athletic achievements' },
+  { name: 'Art', description: 'Visual arts, paintings, and creative works' },
+  { name: 'Travel', description: 'Travel experiences and destinations' }
+];
+
+async function initializeDefaultTags() {
+  try {
+    console.log('Initializing default tags...');
+    
+    // Start a transaction
+    await db.query('BEGIN');
+
+    for (const tag of DEFAULT_TAGS) {
+      // Check if tag already exists
+      const existingTag = await db.query(
+        'SELECT id FROM tags WHERE tag_name = $1',
+        [tag.name]
+      );
+
+      if (existingTag.rows.length === 0) {
+        // Create new tag if it doesn't exist
+        await db.query(
+          `INSERT INTO tags (tag_name, description, status)
+           VALUES ($1, $2, 'approved')`,
+          [tag.name, tag.description]
+        );
+        console.log(`Created tag: ${tag.name}`);
+      }
+    }
+
+    await db.query('COMMIT');
+    console.log('Default tags initialized successfully');
+  } catch (err) {
+    await db.query('ROLLBACK');
+    console.error('Error initializing default tags:', err);
+  }
+}
+
 db.connect()
-  .then(() => console.log('Database connected successfully'))
+  .then(() => {
+    console.log('Database connected successfully');
+    // Initialize default tags after database connection
+    initializeDefaultTags();
+  })
   .catch(err => console.error('Database connection error:', err));
 
 app.listen(8080, () => console.log("port 8080 confirmed"));
@@ -165,7 +251,7 @@ app.post("/logout", (req, res) => {
 
 app.get('/posts', async (req, res) => {
   try {
-    // Get posts with user and tag information using proper joins
+    // get posts with user and tag information using proper joins
     const query = `
       SELECT 
         p.post_id,
@@ -175,7 +261,10 @@ app.get('/posts', async (req, res) => {
         p.post_likes,
         u.username,
         u.profile_pic,
-        ARRAY_AGG(t.tag_name) as tags,
+        COALESCE(
+          ARRAY_AGG(t.tag_name) FILTER (WHERE t.tag_name IS NOT NULL),
+          ARRAY[]::text[]
+        ) as tags,
         COUNT(DISTINCT c.id) as comment_count
       FROM posts p
       LEFT JOIN accounts u ON p.user_id = u.id
@@ -189,7 +278,7 @@ app.get('/posts', async (req, res) => {
 
     const result = await db.query(query);
     
-    // Format posts for client
+    // format posts for client
     const posts = result.rows.map(row => ({
       id: row.post_id,
       title: row.post_title,
@@ -199,7 +288,7 @@ app.get('/posts', async (req, res) => {
       comment_count: parseInt(row.comment_count) || 0,
       username: row.username,
       profile_pic: row.profile_pic,
-      tags: row.tags.filter(tag => tag !== null) // Remove null tags
+      tags: row.tags
     }));
 
     res.json(posts);
@@ -209,7 +298,7 @@ app.get('/posts', async (req, res) => {
   }
 });
 
-// Middleware to check if user is admin
+// check if user is admin
 const isAdmin = async (req, res, next) => {
   if (!req.session.user) {
     return res.status(401).json({ error: "Not logged in" });
@@ -232,7 +321,7 @@ const isAdmin = async (req, res, next) => {
   }
 };
 
-// Get tags (with optional pending for admins)
+// get tags (with optional pending for admins)
 app.get("/tags", async (req, res) => {
     try {
         const isAdmin = req.session.user && req.session.user.role === 'admin';
@@ -273,7 +362,6 @@ app.get("/tags", async (req, res) => {
     }
 });
 
-// Helper function to check if user is admin
 async function checkIsAdmin(userId, db) {
     try {
         const result = await db.query(
@@ -377,7 +465,7 @@ app.patch("/tags/:id/status", isAdmin, async (req, res) => {
   }
 });
 
-// Delete a tag (admin only)
+// delete  tag (admin only)
 app.delete("/tags/:id", isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
@@ -598,16 +686,31 @@ app.post('/posts', async (req, res) => {
   }
 
   try {
-    const { post_title, post_content, tag_ids } = req.body;
+    const { post_title, post_content, tag_ids = [] } = req.body;
 
-    if (!post_title || !post_content || !tag_ids || !tag_ids.length) {
-      return res.status(400).json({ error: "Missing required fields" });
+    if (!post_title || !post_content) {
+      return res.status(400).json({ error: "Title and content are required" });
     }
 
     // Start a transaction
     await db.query('BEGIN');
 
     try {
+      // If there are tag_ids, validate they exist
+      if (tag_ids.length > 0) {
+        const tagCheck = await db.query(
+          `SELECT id FROM tags 
+           WHERE id = ANY($1::int[]) 
+           AND status = 'approved'`,
+          [tag_ids]
+        );
+        
+        if (tagCheck.rows.length !== tag_ids.length) {
+          await db.query('ROLLBACK');
+          return res.status(400).json({ error: "One or more invalid or unapproved tags" });
+        }
+      }
+
       // Create the post
       const postResult = await db.query(
         `INSERT INTO posts (post_title, post_content, user_id, created_at)
@@ -618,12 +721,12 @@ app.post('/posts', async (req, res) => {
 
       const postId = postResult.rows[0].post_id;
 
-      // Add tags to post_tags table
-      for (const tagId of tag_ids) {
+      // Add tags to post_tags table if any
+      if (tag_ids.length > 0) {
         await db.query(
           `INSERT INTO post_tags (post_id, tag_id)
-           VALUES ($1, $2)`,
-          [postId, tagId]
+           SELECT $1, UNNEST($2::int[])`,
+          [postId, tag_ids]
         );
       }
 
@@ -640,7 +743,10 @@ app.post('/posts', async (req, res) => {
           p.post_likes,
           u.username,
           u.profile_pic,
-          ARRAY_AGG(t.tag_name) as tags,
+          COALESCE(
+            ARRAY_AGG(t.tag_name) FILTER (WHERE t.tag_name IS NOT NULL),
+            ARRAY[]::text[]
+          ) as tags,
           0 as comment_count
         FROM posts p
         LEFT JOIN accounts u ON p.user_id = u.id
@@ -661,7 +767,7 @@ app.post('/posts', async (req, res) => {
         comment_count: 0,
         username: result.rows[0].username,
         profile_pic: result.rows[0].profile_pic,
-        tags: result.rows[0].tags.filter(tag => tag !== null)
+        tags: result.rows[0].tags
       };
 
       res.status(201).json(post);
@@ -694,7 +800,10 @@ app.get('/posts/:id', async (req, res) => {
         p.post_likes,
         u.username,
         u.profile_pic,
-        ARRAY_AGG(t.tag_name) as tags,
+        COALESCE(
+          ARRAY_AGG(t.tag_name) FILTER (WHERE t.tag_name IS NOT NULL),
+          ARRAY[]::text[]
+        ) as tags,
         COUNT(DISTINCT c.id) as comment_count,
         EXISTS (
           SELECT 1 FROM post_likes pl 
@@ -725,7 +834,7 @@ app.get('/posts/:id', async (req, res) => {
       comment_count: parseInt(result.rows[0].comment_count) || 0,
       username: result.rows[0].username,
       profile_pic: result.rows[0].profile_pic,
-      tags: result.rows[0].tags.filter(tag => tag !== null),
+      tags: result.rows[0].tags,
       liked: result.rows[0].liked || false
     };
 
@@ -977,7 +1086,25 @@ app.post('/comments/:id/like', async (req, res) => {
   }
 });
 
-// Handle 404s by sending JSON instead of HTML
+// Handle API 404s - must come after all API routes
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: "API endpoint not found" });
+});
+
+// Serve static files
+app.use(express.static(path.join(__dirname, '../client')));
+
+// Serve index.html for client-side routing
+app.use((req, res, next) => {
+  // Skip if the request is for a file
+  if (req.path.includes('.')) {
+    return next();
+  }
+  
+  res.sendFile(path.join(__dirname, '../client/index.html'));
+});
+
+// Final 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: "Not Found" });
 });
